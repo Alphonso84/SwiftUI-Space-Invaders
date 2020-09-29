@@ -27,7 +27,7 @@ struct ContentView:View {
                 ShipView(currentLocation: offSet)
                 
                 MissileView(currentLocation: missileLocation)
-                    .animation(.easeIn(duration: 0.4))
+                    .animation(.easeIn(duration: 0.2))
             }
             
             //MARK:- Button Controls
@@ -74,26 +74,21 @@ struct ContentView:View {
     func downButtonPressed(){
         offSet.height += 100
         self.characterLocation = offSet
-        self.missileLocation = characterLocation
-        
     }
     
     func upButtonPressed(){
         offSet.height -= 100
         characterLocation = offSet
-        missileLocation = characterLocation
     }
     
     func rightButtonPressed(){
         offSet.width += 100
         characterLocation = offSet
-        missileLocation = offSet
     }
     
     func leftButtonPressed(){
         offSet.width -= 100
         characterLocation = offSet
-        missileLocation = characterLocation
     }
 }
 
