@@ -18,15 +18,13 @@ struct ShipView:View {
     }
 }
 struct MissileView:View {
-    var currentLocation = CGSize()
-    var fireLocation = CGSize()
+     var currentLocation = CGSize()
+     var fireLocation = CGSize()
     var body: some View {
         Image(systemName: "chevron.compact.up")
             .resizable()
             .frame(width: 10, height: 10)
-            .opacity(1)
             .offset(currentLocation)
-            .animation(.easeIn(duration: 0.3))
     }
 }
 
@@ -42,7 +40,6 @@ struct ContentView:View {
                     self.offSet.width = 0
                     self.offSet.height = 0
                     self.characterLocation = self.offSet
-                    self.missileLocation = self.offSet
                 }
             }
             Spacer()
@@ -50,7 +47,8 @@ struct ContentView:View {
                 
                 ShipView(currentLocation: offSet)
                 
-                MissileView(currentLocation: offSet)
+                MissileView(currentLocation: missileLocation)
+                    .animation(.easeIn(duration: 0.2))
                 
             }
             
@@ -73,7 +71,6 @@ struct ContentView:View {
                     Spacer()
                     Button("FIRE") {
                         self.fireButtonPressed()
-                        self.missileLocation.height -= 1000
                     }
                     .offset(x: 30.0, y: 0)
                     .foregroundColor(.red)
@@ -89,13 +86,13 @@ struct ContentView:View {
      Mark:- Each Button Method when called modifies the "offSet" State. When doing so it refreshes our view.
      */
     func fireButtonPressed(){
-        missileLocation.height -= 1000
+        self.missileLocation.height -= 1000
         
     }
     func downButtonPressed(){
         offSet.height += 100
-        characterLocation = offSet
-        missileLocation = characterLocation
+        self.characterLocation = offSet
+        self.missileLocation = characterLocation
         
     }
     
