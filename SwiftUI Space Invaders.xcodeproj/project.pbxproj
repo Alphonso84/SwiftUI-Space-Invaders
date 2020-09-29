@@ -13,6 +13,8 @@
 		D0D4F53B25225C3500900D9F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F53A25225C3500900D9F /* Preview Assets.xcassets */; };
 		D0D4F5442522E47000900D9F /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F5432522E47000900D9F /* ShipView.swift */; };
 		D0D4F5472522E4C300900D9F /* MissileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F5462522E4C300900D9F /* MissileView.swift */; };
+		D0D4F54A2523F39200900D9F /* LaserGun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F5492523F39200900D9F /* LaserGun.mp3 */; };
+		D0D4F5512523FE0C00900D9F /* ClippedAudio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F5502523FE0C00900D9F /* ClippedAudio.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		D0D4F53C25225C3500900D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0D4F5432522E47000900D9F /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
 		D0D4F5462522E4C300900D9F /* MissileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissileView.swift; sourceTree = "<group>"; };
+		D0D4F5492523F39200900D9F /* LaserGun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = LaserGun.mp3; sourceTree = "<group>"; };
+		D0D4F5502523FE0C00900D9F /* ClippedAudio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ClippedAudio.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 				D0D4F53525225C3300900D9F /* ContentView.swift */,
 				D0D4F5432522E47000900D9F /* ShipView.swift */,
 				D0D4F5462522E4C300900D9F /* MissileView.swift */,
+				D0D4F5492523F39200900D9F /* LaserGun.mp3 */,
+				D0D4F5502523FE0C00900D9F /* ClippedAudio.mp3 */,
 				D0D4F53725225C3500900D9F /* Assets.xcassets */,
 				D0D4F53C25225C3500900D9F /* Info.plist */,
 				D0D4F53925225C3500900D9F /* Preview Content */,
@@ -133,7 +139,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0D4F53B25225C3500900D9F /* Preview Assets.xcassets in Resources */,
+				D0D4F5512523FE0C00900D9F /* ClippedAudio.mp3 in Resources */,
 				D0D4F53825225C3500900D9F /* Assets.xcassets in Resources */,
+				D0D4F54A2523F39200900D9F /* LaserGun.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

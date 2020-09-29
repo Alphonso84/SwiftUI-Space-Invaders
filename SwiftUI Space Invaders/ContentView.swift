@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct ContentView:View {
     //MARK:- ContentView Properties
+    @State private var laserSound: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize(width: 0, height: 0)
     @State private var missileLocation = CGSize(width: 0, height: 0)
@@ -49,7 +51,8 @@ struct ContentView:View {
                     Button("FIRE") {
                         self.fireButtonPressed { (success) in
                             if success {
-                                self.missileLocation.height -= 1300
+                               self.missileLocation.height -= 1300
+                               playAudio()
                             }
                         }
                     }
@@ -64,9 +67,23 @@ struct ContentView:View {
     }
     
     //MARK:- Button Methods
+    func playAudio() {
+        if let audioURL = Bundle.main.url(forResource: "ClippedAudio", withExtension: "mp3") {
+            do {
+                try self.laserSound = AVAudioPlayer(contentsOf: audioURL)
+                self.laserSound?.numberOfLoops = 0
+                self.laserSound?.play()
+            } catch {
+                print("Couldn't play audio Error: \(error)")
+            }
+        } else {
+            print("No audio file found")
+        }
+    }
     
     func fireButtonPressed(completion: (_ success:Bool) ->Void) {
         withAnimation(.linear) {
+            playAudio()
             self.missileLocation = self.offSet
         }
         completion(true)
