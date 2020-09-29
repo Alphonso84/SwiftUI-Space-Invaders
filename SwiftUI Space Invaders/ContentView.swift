@@ -29,7 +29,6 @@ struct ContentView:View {
                 MissileView(currentLocation: missileLocation)
                     .animation(.easeIn(duration: 0.2))
             }
-            
             //MARK:- Button Controls
             VStack {
                 Button("UP") {
@@ -49,7 +48,7 @@ struct ContentView:View {
                     Button("FIRE") {
                         self.fireButtonPressed { (success) in
                             if success {
-                                self.missileLocation.height -= 1000
+                                self.missileLocation.height -= 1300
                             }
                         }
                     }
@@ -97,5 +96,6 @@ struct ContentView:View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
     }
 }
