@@ -7,27 +7,6 @@
 
 import SwiftUI
 
-struct ShipView:View {
-    var currentLocation = CGSize()
-    var body: some View {
-        Image(systemName: "circle")
-            .resizable()
-            .frame(width:40, height:40)
-            .offset(currentLocation)
-            .animation(.easeOut(duration: 0.3))
-    }
-}
-struct MissileView:View {
-     var currentLocation = CGSize()
-     var fireLocation = CGSize()
-    var body: some View {
-        Image(systemName: "chevron.compact.up")
-            .resizable()
-            .frame(width: 10, height: 10)
-            .offset(currentLocation)
-    }
-}
-
 struct ContentView:View {
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize(width: 0, height: 0)
@@ -43,20 +22,18 @@ struct ContentView:View {
                 }
             }
             Spacer()
+            //MARK:- Ship and Missile Views
             ZStack {
-                
                 ShipView(currentLocation: offSet)
                 
                 MissileView(currentLocation: missileLocation)
-                    .animation(.easeIn(duration: 0.2))
-                
+                    .animation(.easeIn(duration: 0.4))
             }
             
             //MARK:- Button Controls
             VStack {
                 Button("UP") {
                     self.upButtonPressed()
-                    
                 }
                 HStack {
                     Spacer()
@@ -70,7 +47,11 @@ struct ContentView:View {
                     .offset(x: 40.0, y: 0)
                     Spacer()
                     Button("FIRE") {
-                        self.fireButtonPressed()
+                        self.fireButtonPressed { (success) in
+                            if success {
+                                self.missileLocation.height -= 1000
+                            }
+                        }
                     }
                     .offset(x: 30.0, y: 0)
                     .foregroundColor(.red)
@@ -82,12 +63,13 @@ struct ContentView:View {
         }
     }
     
-    /*
-     Mark:- Each Button Method when called modifies the "offSet" State. When doing so it refreshes our view.
-     */
-    func fireButtonPressed(){
-        self.missileLocation.height -= 1000
-        
+    //MARK:- Button Methods
+    
+    func fireButtonPressed(completion: (_ success:Bool) ->Void) {
+        withAnimation(.linear) {
+            self.missileLocation = self.offSet
+        }
+        completion(true)
     }
     func downButtonPressed(){
         offSet.height += 100
@@ -113,8 +95,6 @@ struct ContentView:View {
         characterLocation = offSet
         missileLocation = characterLocation
     }
-    
-    
 }
 
 

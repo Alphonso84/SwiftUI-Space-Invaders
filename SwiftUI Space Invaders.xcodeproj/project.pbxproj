@@ -11,6 +11,8 @@
 		D0D4F53625225C3300900D9F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F53525225C3300900D9F /* ContentView.swift */; };
 		D0D4F53825225C3500900D9F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F53725225C3500900D9F /* Assets.xcassets */; };
 		D0D4F53B25225C3500900D9F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F53A25225C3500900D9F /* Preview Assets.xcassets */; };
+		D0D4F5442522E47000900D9F /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F5432522E47000900D9F /* ShipView.swift */; };
+		D0D4F5472522E4C300900D9F /* MissileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F5462522E4C300900D9F /* MissileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		D0D4F53725225C3500900D9F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0D4F53A25225C3500900D9F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D0D4F53C25225C3500900D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0D4F5432522E47000900D9F /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
+		D0D4F5462522E4C300900D9F /* MissileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +58,8 @@
 			children = (
 				D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */,
 				D0D4F53525225C3300900D9F /* ContentView.swift */,
+				D0D4F5432522E47000900D9F /* ShipView.swift */,
+				D0D4F5462522E4C300900D9F /* MissileView.swift */,
 				D0D4F53725225C3500900D9F /* Assets.xcassets */,
 				D0D4F53C25225C3500900D9F /* Info.plist */,
 				D0D4F53925225C3500900D9F /* Preview Content */,
@@ -138,6 +144,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D4F5442522E47000900D9F /* ShipView.swift in Sources */,
+				D0D4F5472522E4C300900D9F /* MissileView.swift in Sources */,
 				D0D4F53625225C3300900D9F /* ContentView.swift in Sources */,
 				D0D4F53425225C3300900D9F /* SwiftUI_Space_InvadersApp.swift in Sources */,
 			);
