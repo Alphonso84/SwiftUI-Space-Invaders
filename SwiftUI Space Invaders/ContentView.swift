@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView:View {
+    //MARK:- ContentView Properties
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize(width: 0, height: 0)
     @State private var missileLocation = CGSize(width: 0, height: 0)
@@ -24,10 +25,10 @@ struct ContentView:View {
             Spacer()
             //MARK:- Ship and Missile Views
             ZStack {
-                ShipView(currentLocation: offSet)
+                ShipView(currentLocation: characterLocation)
                 
                 MissileView(currentLocation: missileLocation)
-                    .animation(.easeIn(duration: 0.2))
+                    .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
             }
             //MARK:- Button Controls
             VStack {

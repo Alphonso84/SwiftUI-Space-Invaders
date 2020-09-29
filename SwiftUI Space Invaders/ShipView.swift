@@ -10,7 +10,7 @@ import SwiftUI
 struct ShipView:View {
     var currentLocation = CGSize()
     var body: some View {
-        Image(systemName: "circle")
+        Image("battleship")
             .resizable()
             .frame(width:40, height:40)
             .offset(currentLocation)

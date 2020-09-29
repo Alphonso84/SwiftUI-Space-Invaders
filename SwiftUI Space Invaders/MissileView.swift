@@ -11,10 +11,19 @@ struct MissileView:View {
      var currentLocation = CGSize()
      var fireLocation = CGSize()
     var body: some View {
-        Image(systemName: "chevron.compact.up")
-            .resizable()
-            .frame(width: 10, height: 10)
-            .offset(currentLocation)
+        VStack{
+            Image(systemName: "chevron.compact.up")
+                .resizable()
+                .frame(width: 10, height: 10)
+                .offset(currentLocation)
+                .shadow(color: .yellow, radius: 20, x: 0, y: 0)
+            Image(systemName: "chevron.compact.up")
+                .resizable()
+                .frame(width: 10, height: 10)
+                .offset(currentLocation)
+                .shadow(color: .yellow, radius: 20, x: 30, y: 30)
+            
+        }
     }
 }
 
