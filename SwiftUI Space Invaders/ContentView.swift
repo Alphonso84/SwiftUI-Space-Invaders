@@ -17,7 +17,9 @@ struct ContentView:View {
     var body: some View {
         ZStack {
 //MARK:- Emitter View
-            EmitterView(particleCount: 200, angleRange: .degrees(360), opacitySpeed: -1, scale: 0.4, scaleRange: 0.1, scaleSpeed: 0.4, speedRange: 80)
+            EmitterView(particleCount: 1000, angleRange: .degrees(90), opacitySpeed: 1, scale: 0.05, scaleRange: 0.01, scaleSpeed: 0.2, speedRange: 20000)
+                .offset(CGSize(width:00, height:-200))
+                
             VStack{
                 HStack{
                     Text("\(self.characterLocation.debugDescription)")
