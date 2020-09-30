@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView:View {
-    //MARK:- ContentView Properties
+//MARK:- ContentView Properties
     @State private var laserSound: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize(width: 0, height: 0)
@@ -25,14 +25,14 @@ struct ContentView:View {
                 }
             }
             Spacer()
-            //MARK:- Ship and Missile Views
+//MARK:- Ship and Missile Views
             ZStack {
                 ShipView(currentLocation: characterLocation)
                 
                 MissileView(currentLocation: missileLocation)
                     .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
             }
-            //MARK:- Button Controls
+//MARK:- Button Controls
             VStack {
                 Button("UP") {
                     self.upButtonPressed()
@@ -66,7 +66,7 @@ struct ContentView:View {
         }
     }
     
-    //MARK:- Button Methods
+//MARK:- Audio Methods
     func playAudio() {
         if let audioURL = Bundle.main.url(forResource: "ClippedAudio", withExtension: "mp3") {
             do {
@@ -80,7 +80,7 @@ struct ContentView:View {
             print("No audio file found")
         }
     }
-    
+//MARK:- Button Methods
     func fireButtonPressed(completion: (_ success:Bool) ->Void) {
         withAnimation(.linear) {
             playAudio()
