@@ -15,54 +15,58 @@ struct ContentView:View {
     @State private var characterLocation = CGSize(width: 0, height: 0)
     @State private var missileLocation = CGSize(width: 0, height: 0)
     var body: some View {
-        VStack{
-            HStack{
-                Text("\(self.characterLocation.debugDescription)")
-                Text("RESET").foregroundColor(.red).onTapGesture {
-                    self.offSet.width = 0
-                    self.offSet.height = 0
-                    self.characterLocation = self.offSet
+        ZStack {
+//MARK:- Emitter View
+            EmitterView(particleCount: 200, angleRange: .degrees(360), opacitySpeed: -1, scale: 0.4, scaleRange: 0.1, scaleSpeed: 0.4, speedRange: 80)
+            VStack{
+                HStack{
+                    Text("\(self.characterLocation.debugDescription)")
+                    Text("RESET").foregroundColor(.red).onTapGesture {
+                        self.offSet.width = 0
+                        self.offSet.height = 0
+                        self.characterLocation = self.offSet
+                    }
                 }
-            }
-            Spacer()
+                Spacer()
 //MARK:- Ship and Missile Views
-            ZStack {
-                ShipView(currentLocation: characterLocation)
-                
-                MissileView(currentLocation: missileLocation)
-                    .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
-            }
-//MARK:- Button Controls
-            VStack {
-                Button("UP") {
-                    self.upButtonPressed()
+                ZStack {
+                    ShipView(currentLocation: characterLocation)
+                    
+                    MissileView(currentLocation: missileLocation)
+                        .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                 }
-                HStack {
-                    Spacer()
-                    Button("LEFT") {
-                        self.leftButtonPressed()
+//MARK:- Button Controls
+                VStack {
+                    Button("UP") {
+                        self.upButtonPressed()
                     }
-                    Spacer()
-                    Button("RIGHT") {
-                        self.rightButtonPressed()
-                    }
-                    .offset(x: 40.0, y: 0)
-                    Spacer()
-                    Button("FIRE") {
-                        self.fireButtonPressed { (success) in
-                            if success {
-                               self.missileLocation.height -= 1300
-                               playAudio()
+                    HStack {
+                        Spacer()
+                        Button("LEFT") {
+                            self.leftButtonPressed()
+                        }
+                        Spacer()
+                        Button("RIGHT") {
+                            self.rightButtonPressed()
+                        }
+                        .offset(x: 40.0, y: 0)
+                        Spacer()
+                        Button("FIRE") {
+                            self.fireButtonPressed { (success) in
+                                if success {
+                                    self.missileLocation.height -= 1300
+                                    playAudio()
+                                }
                             }
                         }
+                        .offset(x: 30.0, y: 0)
+                        .foregroundColor(.red)
                     }
-                    .offset(x: 30.0, y: 0)
-                    .foregroundColor(.red)
-                }
-                Button("DOWN"){
-                    self.downButtonPressed()
-                }
-            }.offset(x: -60.0, y: /*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
+                    Button("DOWN"){
+                        self.downButtonPressed()
+                    }
+                }.offset(x: -60.0, y: /*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
+            }
         }
     }
     
