@@ -39,6 +39,7 @@ struct ContentView:View {
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                 }
+                
 //MARK:- Button Controls
                 VStack {
                     Button("UP") {
@@ -74,6 +75,7 @@ struct ContentView:View {
         }
     }
     
+ //MARK:- Enemy Position Method
     func enemyPosition() ->CGSize {
         var position = CGSize()
         let verticalPositionRange = Double.random(in: -600...0)
