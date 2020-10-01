@@ -11,13 +11,14 @@ import AVFoundation
 struct ContentView:View {
     //MARK:- ContentView Properties
     @State private var laserSound: AVAudioPlayer?
+    @State private var gameMusic: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize(width: 0, height: 0)
     @State private var missileLocation = CGSize(width: 0, height: 0)
     var body: some View {
         ZStack {
             //MARK:- Emitter View
-            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 800, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 1)
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
@@ -55,7 +56,7 @@ struct ContentView:View {
                             self.fireButtonPressed { (success) in
                                 if success {
                                     self.missileLocation.height -= 1300
-                                    playAudio()
+                                    playWeaponAudio()
                                 }
                             }
                         }
@@ -68,6 +69,9 @@ struct ContentView:View {
                 }.offset(x: -60.0, y: /*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
             }
         } .statusBar(hidden: true)
+        .onAppear(perform: {
+            playMusicAudio()
+        })
     }
     
     //MARK:- Enemy Position Method
@@ -81,7 +85,21 @@ struct ContentView:View {
     }
     
     //MARK:- Audio Methods
-    func playAudio() {
+    func playMusicAudio() {
+        if let audioURL = Bundle.main.url(forResource: "ES_Ultramarine - Aleph One", withExtension: "mp3") {
+            do {
+                try self.gameMusic = AVAudioPlayer(contentsOf: audioURL)
+                self.gameMusic?.numberOfLoops = 0
+                self.gameMusic?.play()
+            } catch {
+                print("Couldn't play audio Error: \(error)")
+            }
+        } else {
+            print("No audio file found")
+        }
+    }
+    
+    func playWeaponAudio() {
         if let audioURL = Bundle.main.url(forResource: "ClippedAudio", withExtension: "mp3") {
             do {
                 try self.laserSound = AVAudioPlayer(contentsOf: audioURL)
@@ -97,7 +115,7 @@ struct ContentView:View {
     //MARK:- Button Methods
     func fireButtonPressed(completion: (_ success:Bool) ->Void) {
         withAnimation(.linear) {
-            playAudio()
+            playWeaponAudio()
             self.missileLocation = self.offSet
         }
         completion(true)
