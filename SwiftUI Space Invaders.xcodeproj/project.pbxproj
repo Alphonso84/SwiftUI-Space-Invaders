@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D09E0DFB25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D09E0DFA25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 */; };
 		D0D4F53425225C3300900D9F /* SwiftUI_Space_InvadersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */; };
 		D0D4F53625225C3300900D9F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F53525225C3300900D9F /* ContentView.swift */; };
 		D0D4F53825225C3500900D9F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F53725225C3500900D9F /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D09E0DFA25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ES_Ultramarine - Aleph One.mp3"; sourceTree = "<group>"; };
 		D0D4F53025225C3300900D9F /* SwiftUI Space Invaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Space Invaders.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_Space_InvadersApp.swift; sourceTree = "<group>"; };
 		D0D4F53525225C3300900D9F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				D0D4F5572525554200900D9F /* EnemyShipView.swift */,
 				D0D4F5462522E4C300900D9F /* MissileView.swift */,
 				D0D4F5492523F39200900D9F /* LaserGun.mp3 */,
+				D09E0DFA25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 */,
 				D0D4F5502523FE0C00900D9F /* ClippedAudio.mp3 */,
 				D0D4F53725225C3500900D9F /* Assets.xcassets */,
 				D0D4F53C25225C3500900D9F /* Info.plist */,
@@ -144,6 +147,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D09E0DFB25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 in Resources */,
 				D0D4F53B25225C3500900D9F /* Preview Assets.xcassets in Resources */,
 				D0D4F5512523FE0C00900D9F /* ClippedAudio.mp3 in Resources */,
 				D0D4F53825225C3500900D9F /* Assets.xcassets in Resources */,
