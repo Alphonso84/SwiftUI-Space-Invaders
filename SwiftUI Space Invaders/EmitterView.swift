@@ -52,7 +52,7 @@ struct EmitterView: View {
     var scaleSpeed: CGFloat = 0
     
     var speed = 50.0
-    var speedRange = 0.0
+    var speedRange = 10.0
     
     var body: some View {
         GeometryReader { geo in

@@ -1,25 +1,25 @@
 //
-//  ShipView.swift
+//  EnemyShipView.swift
 //  SwiftUI Space Invaders
 //
-//  Created by Alphonso Sensley II on 9/28/20.
+//  Created by Alphonso Sensley II on 9/30/20.
 //
 
 import SwiftUI
 
-struct ShipView:View {
+struct EnemyShipView:View {
     var currentLocation = CGSize()
     var body: some View {
-        Image("spaceship")
+        Image("ufo")
             .resizable()
-            .frame(width:40, height:40)
+            .frame(width:70, height:50)
             .offset(currentLocation)
             .animation(.easeOut(duration: 0.3))
     }
 }
 
-struct ShipView_Previews: PreviewProvider {
+struct EnemyShipView_Previews: PreviewProvider {
     static var previews: some View {
-        ShipView()
+        EnemyShipView()
     }
 }
