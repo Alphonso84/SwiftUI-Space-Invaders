@@ -17,19 +17,10 @@ struct ContentView:View {
     var body: some View {
         ZStack {
             //MARK:- Emitter View
-            
+            //TODO:- MAKE EMITTER CONSTANT
             EmitterView(particleCount: 500, angle:.degrees(180),angleRange: .degrees(45), opacityRange: 0.1, opacitySpeed: 10, scale: 0.05, scaleRange: 0.1, speed:2000, speedRange: 2000)
                 .offset(CGSize(width:00, height:-700))
-            
             VStack{
-//                HStack{
-//                    Text("\(self.characterLocation.debugDescription)")
-//                    Text("RESET").foregroundColor(.red).onTapGesture {
-//                        self.offSet.width = 0
-//                        self.offSet.height = 0
-//                        self.characterLocation = self.offSet
-//                    }
-//                }
                 Spacer()
                 //MARK:- Ship and Missile Views
                 ZStack {
