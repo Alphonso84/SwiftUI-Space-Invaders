@@ -34,6 +34,10 @@ struct ContentView:View {
                 ZStack {
                     EnemyShipView()
                         .offset(enemyPosition())
+                    EnemyShipView()
+                        .offset(enemyPosition())
+                    EnemyShipView()
+                        .offset(enemyPosition())
                     ShipView(currentLocation: characterLocation)
                     
                     MissileView(currentLocation: missileLocation)
@@ -78,7 +82,7 @@ struct ContentView:View {
  //MARK:- Enemy Position Method
     func enemyPosition() ->CGSize {
         var position = CGSize()
-        let verticalPositionRange = Double.random(in: -600...0)
+        let verticalPositionRange = Double.random(in: -600...(-200))
         let horizontalPositionRange = Double.random(in: -200...200)
         position = CGSize(width: horizontalPositionRange , height: verticalPositionRange)
         print(position.debugDescription)
