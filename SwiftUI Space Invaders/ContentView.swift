@@ -17,9 +17,8 @@ struct ContentView:View {
     var body: some View {
         ZStack {
             //MARK:- Emitter View
-            //TODO:- MAKE EMITTER CONSTANT
-            EmitterView(particleCount: 500, angle:.degrees(180),angleRange: .degrees(45), opacityRange: 0.1, opacitySpeed: 10, scale: 0.05, scaleRange: 0.1, speed:2000, speedRange: 2000)
-                .offset(CGSize(width:00, height:-700))
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 800, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 1)
+            
             VStack{
                 Spacer()
                 //MARK:- Ship and Missile Views
