@@ -35,6 +35,8 @@ struct EmitterView: View {
         }
     }
     
+    
+    var images = [String]()
     var particleCount: Int
     
     var creationPoint = UnitPoint.top
@@ -54,12 +56,15 @@ struct EmitterView: View {
     var speed = 50.0
     var speedRange = 10.0
     
+    var animation = Animation.linear(duration: 1).repeatForever(autoreverses: false)
+    var animationDelayThreshold = 0.0
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 ForEach(0..<self.particleCount, id:\.self) { i in
                     ParticleView(position: self.position(in: geo),opacity: self.makeOpacity(),scale: self.makeScale())
-                        .animation(Animation.linear(duration: 5).repeatForever(autoreverses: true))
+                        .animation(self.animation.delay(Double.random(in: 0...self.animationDelayThreshold)))
                 }
             }
         }
