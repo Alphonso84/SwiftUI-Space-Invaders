@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct EnemyShipView:View {
-    var currentLocation = CGSize()
     var body: some View {
         Image("ufo")
             .resizable()
             .frame(width:70, height:50)
-            .offset(currentLocation)
-            .animation(.easeOut(duration: 0.3))
+            .animation(Animation.linear(duration: 4).repeatForever(autoreverses: true))
     }
 }
+    
+    
 
 struct EnemyShipView_Previews: PreviewProvider {
     static var previews: some View {

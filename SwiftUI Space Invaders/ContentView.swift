@@ -17,8 +17,8 @@ struct ContentView:View {
     var body: some View {
         ZStack {
 //MARK:- Emitter View
-            EmitterView(particleCount: 1000, angleRange: .degrees(90), opacitySpeed: 1, scale: 0.05, scaleRange: 0.01, scaleSpeed: 0.2, speedRange: 20000)
-                .offset(CGSize(width:00, height:-200))
+           // EmitterView(particleCount: 1000, angleRange: .degrees(90), opacitySpeed: 1, scale: 0.05, scaleRange: 0.01, scaleSpeed: 0.2, speedRange: 20000)
+              //  .offset(CGSize(width:00, height:-200))
                 
             VStack{
                 HStack{
@@ -32,6 +32,8 @@ struct ContentView:View {
                 Spacer()
 //MARK:- Ship and Missile Views
                 ZStack {
+                    EnemyShipView()
+                        .offset(enemyPosition())
                     ShipView(currentLocation: characterLocation)
                     
                     MissileView(currentLocation: missileLocation)
@@ -72,6 +74,15 @@ struct ContentView:View {
         }
     }
     
+    func enemyPosition() ->CGSize {
+        var position = CGSize()
+        let verticalPositionRange = Double.random(in: -600...0)
+        let horizontalPositionRange = Double.random(in: -200...200)
+        position = CGSize(width: horizontalPositionRange , height: verticalPositionRange)
+        print(position.debugDescription)
+        return position
+    }
+
 //MARK:- Audio Methods
     func playAudio() {
         if let audioURL = Bundle.main.url(forResource: "ClippedAudio", withExtension: "mp3") {
