@@ -68,7 +68,7 @@ struct ContentView:View {
                     }
                 }.offset(x: -60.0, y: /*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
             }
-        }
+        } .statusBar(hidden: true)
     }
     
     //MARK:- Enemy Position Method
