@@ -15,7 +15,7 @@ struct EmitterView: View {
         let scale: ParticleState<CGFloat>
         var body: some View {
             Image("spark")
-                .frame(width:3, height: 3)
+                .frame(width:2, height: 2)
                 .opacity(isActive ? opacity.end : opacity.start)
                 .scaleEffect(isActive ? scale.end : scale.start)
                 .position(isActive ? position.end : position.start)
@@ -59,7 +59,7 @@ struct EmitterView: View {
             ZStack {
                 ForEach(0..<self.particleCount, id:\.self) { i in
                     ParticleView(position: self.position(in: geo),opacity: self.makeOpacity(),scale: self.makeScale())
-                        .animation(Animation.linear(duration: 10).repeatForever(autoreverses: true))
+                        .animation(Animation.linear(duration: 5).repeatForever(autoreverses: true))
                 }
             }
         }

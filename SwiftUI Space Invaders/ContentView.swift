@@ -9,28 +9,20 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView:View {
-//MARK:- ContentView Properties
+    //MARK:- ContentView Properties
     @State private var laserSound: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize(width: 0, height: 0)
     @State private var missileLocation = CGSize(width: 0, height: 0)
     var body: some View {
         ZStack {
-//MARK:- Emitter View
-           // EmitterView(particleCount: 1000, angleRange: .degrees(90), opacitySpeed: 1, scale: 0.05, scaleRange: 0.01, scaleSpeed: 0.2, speedRange: 20000)
-              //  .offset(CGSize(width:00, height:-200))
-                
+            //MARK:- Emitter View
+            //TODO:- MAKE EMITTER CONSTANT
+            EmitterView(particleCount: 500, angle:.degrees(180),angleRange: .degrees(45), opacityRange: 0.1, opacitySpeed: 10, scale: 0.05, scaleRange: 0.1, speed:2000, speedRange: 2000)
+                .offset(CGSize(width:00, height:-700))
             VStack{
-                HStack{
-                    Text("\(self.characterLocation.debugDescription)")
-                    Text("RESET").foregroundColor(.red).onTapGesture {
-                        self.offSet.width = 0
-                        self.offSet.height = 0
-                        self.characterLocation = self.offSet
-                    }
-                }
                 Spacer()
-//MARK:- Ship and Missile Views
+                //MARK:- Ship and Missile Views
                 ZStack {
                     EnemyShipView()
                         .offset(enemyPosition())
@@ -44,7 +36,7 @@ struct ContentView:View {
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                 }
                 
-//MARK:- Button Controls
+                //MARK:- Button Controls
                 VStack {
                     Button("UP") {
                         self.upButtonPressed()
@@ -79,7 +71,7 @@ struct ContentView:View {
         }
     }
     
- //MARK:- Enemy Position Method
+    //MARK:- Enemy Position Method
     func enemyPosition() ->CGSize {
         var position = CGSize()
         let verticalPositionRange = Double.random(in: -600...(-200))
@@ -88,8 +80,8 @@ struct ContentView:View {
         print(position.debugDescription)
         return position
     }
-
-//MARK:- Audio Methods
+    
+    //MARK:- Audio Methods
     func playAudio() {
         if let audioURL = Bundle.main.url(forResource: "ClippedAudio", withExtension: "mp3") {
             do {
@@ -103,7 +95,7 @@ struct ContentView:View {
             print("No audio file found")
         }
     }
-//MARK:- Button Methods
+    //MARK:- Button Methods
     func fireButtonPressed(completion: (_ success:Bool) ->Void) {
         withAnimation(.linear) {
             playAudio()
