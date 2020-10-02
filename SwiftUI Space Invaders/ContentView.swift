@@ -30,10 +30,9 @@ struct ContentView:View {
                         .offset(enemyPosition())
                     EnemyShipView()
                         .offset(enemyPosition())
-                    ShipView(currentLocation: characterLocation)
-                    
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
+                    ShipView(currentLocation: characterLocation)
                 }
                 
                 //MARK:- Button Controls
@@ -66,9 +65,11 @@ struct ContentView:View {
                     Button("DOWN"){
                         self.downButtonPressed()
                     }
-                }.offset(x: -60.0, y: /*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
+                }.offset(x: -60.0, y: -20.0)
             }
         } .statusBar(hidden: true)
+        .background(Color.black)
+        .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
             playMusicAudio()
         })
@@ -89,7 +90,7 @@ struct ContentView:View {
         if let audioURL = Bundle.main.url(forResource: "ES_Ultramarine - Aleph One", withExtension: "mp3") {
             do {
                 try self.gameMusic = AVAudioPlayer(contentsOf: audioURL)
-                self.gameMusic?.numberOfLoops = 0
+                self.gameMusic?.numberOfLoops = 1
                 self.gameMusic?.play()
             } catch {
                 print("Couldn't play audio Error: \(error)")
