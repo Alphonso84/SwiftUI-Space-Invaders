@@ -40,15 +40,19 @@ struct ContentView:View {
                     Button("UP") {
                         self.upButtonPressed()
                     }
+                    .buttonStyle(MyButtonStyle())
+                    
                     HStack {
                         Spacer()
                         Button("LEFT") {
                             self.leftButtonPressed()
                         }
+                        .buttonStyle(MyButtonStyle())
                         Spacer()
                         Button("RIGHT") {
                             self.rightButtonPressed()
                         }
+                        .buttonStyle(MyButtonStyle())
                         .offset(x: 40.0, y: 0)
                         Spacer()
                         Button("FIRE") {
@@ -59,12 +63,14 @@ struct ContentView:View {
                                 }
                             }
                         }
+                        .buttonStyle(MyButtonStyle())
                         .offset(x: 30.0, y: 0)
                         .foregroundColor(.red)
                     }
                     Button("DOWN"){
                         self.downButtonPressed()
                     }
+                    .buttonStyle(MyButtonStyle())
                 }.offset(x: -60.0, y: -20.0)
             }
         } .statusBar(hidden: true)
@@ -81,7 +87,7 @@ struct ContentView:View {
         let verticalPositionRange = Double.random(in: -600...(-200))
         let horizontalPositionRange = Double.random(in: -200...200)
         position = CGSize(width: horizontalPositionRange , height: verticalPositionRange)
-        print(position.debugDescription)
+        print("Enemy horizontal position \(position.width)")
         return position
     }
     
