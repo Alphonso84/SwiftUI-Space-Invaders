@@ -13,8 +13,12 @@ struct ContentView:View {
     @State private var laserSound: AVAudioPlayer?
     @State private var gameMusic: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
-    @State private var characterLocation = CGSize(width: 0, height: 0)
+    @State private var characterLocation = CGSize()
     @State private var missileLocation = CGSize(width: 0, height: 0)
+    @State private var upButtonPressed = false
+    @State private var downButtonPressed = false
+    @State private var leftButtonPressed = false
+    @State private var rightButtonPressed = false
     var body: some View {
         ZStack {
             //MARK:- Emitter View
@@ -37,23 +41,61 @@ struct ContentView:View {
                 
                 //MARK:- Button Controls
                 VStack {
-                    Button("UP") {
-                        self.upButtonPressed()
-                    }
-                    .buttonStyle(MyButtonStyle())
+                    Text("UP")
+                        .foregroundColor(Color.white)
+                        .padding(10)
+                        .background(upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
+                        .cornerRadius(6)
+                        .padding(10)
+                        .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                            if buttonState == .pressed {
+                                upButtonPressed = true
+                                offSet.height -= 100
+                                characterLocation = offSet
+                            } else {
+                                upButtonPressed = false
+                            }
+                        }))
+                        
+                        
+                        
+                        
                     
                     HStack {
                         Spacer()
-                        Button("LEFT") {
-                            self.leftButtonPressed()
-                        }
-                        .buttonStyle(MyButtonStyle())
+                        Text("LEFT")
+                            .foregroundColor(Color.white)
+                            .padding(10)
+                            .background(leftButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                            .cornerRadius(6)
+                            .padding(10)
+                            .offset(x: 30, y: -20)
+                            .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                                if buttonState == .pressed {
+                                    leftButtonPressed = true
+                                    offSet.width -= 100
+                                    characterLocation = offSet
+                                } else {
+                                    leftButtonPressed = false
+                                }
+                            }))
                         Spacer()
-                        Button("RIGHT") {
-                            self.rightButtonPressed()
-                        }
-                        .buttonStyle(MyButtonStyle())
-                        .offset(x: 40.0, y: 0)
+                        Text("RIGHT")
+                            .foregroundColor(Color.white)
+                            .padding(10)
+                            .background(rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                            .cornerRadius(6)
+                            .padding(10)
+                            .offset(x: 40, y: -20)
+                            .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                                if buttonState == .pressed {
+                                    rightButtonPressed = true
+                                    offSet.width += 100
+                                    characterLocation = offSet
+                                } else {
+                                    rightButtonPressed = false
+                                }
+                            }))
                         Spacer()
                         Button("FIRE") {
                             self.fireButtonPressed { (success) in
@@ -67,10 +109,22 @@ struct ContentView:View {
                         .offset(x: 30.0, y: 0)
                         .foregroundColor(.red)
                     }
-                    Button("DOWN"){
-                        self.downButtonPressed()
-                    }
-                    .buttonStyle(MyButtonStyle())
+                    Text("DOWN")
+                        .foregroundColor(Color.white)
+                        .padding(10)
+                        .background(downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                        .cornerRadius(6)
+                        .padding(10)
+                        .offset(x: 0, y: -30)
+                        .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                            if buttonState == .pressed {
+                                downButtonPressed = true
+                                offSet.height += 100
+                                characterLocation = offSet
+                            } else {
+                                downButtonPressed = false
+                            }
+                        }))
                 }.offset(x: -60.0, y: -20.0)
             }
         } .statusBar(hidden: true)
@@ -127,22 +181,22 @@ struct ContentView:View {
         }
         completion(true)
     }
-    func downButtonPressed(){
+    func downButtonIsPressed(){
         offSet.height += 100
         self.characterLocation = offSet
     }
     
-    func upButtonPressed(){
+    func upButtonIsPressed(){
         offSet.height -= 100
         characterLocation = offSet
     }
     
-    func rightButtonPressed(){
+    func rightButtonIsPressed(){
         offSet.width += 100
         characterLocation = offSet
     }
     
-    func leftButtonPressed(){
+    func leftButtonIsPressed(){
         offSet.width -= 100
         characterLocation = offSet
     }
