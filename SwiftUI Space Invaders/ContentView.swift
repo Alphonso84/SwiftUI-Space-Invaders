@@ -36,7 +36,7 @@ struct ContentView:View {
                         .offset(enemyPosition())
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
-                    ShipView(currentLocation: characterLocation)
+                    ShipView(currentLocation:characterLocation)
                 }
                 
                 //MARK:- Button Controls
@@ -47,7 +47,7 @@ struct ContentView:View {
                         .background(upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
                         .cornerRadius(6)
                         .padding(10)
-                        .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                        .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
                                 offSet.height -= 100
@@ -55,12 +55,7 @@ struct ContentView:View {
                             } else {
                                 upButtonPressed = false
                             }
-                        }))
-                        
-                        
-                        
-                        
-                    
+                        }
                     HStack {
                         Spacer()
                         Text("LEFT")
@@ -70,7 +65,7 @@ struct ContentView:View {
                             .cornerRadius(6)
                             .padding(10)
                             .offset(x: 30, y: -20)
-                            .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                            .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
                                     leftButtonPressed = true
                                     offSet.width -= 100
@@ -78,7 +73,7 @@ struct ContentView:View {
                                 } else {
                                     leftButtonPressed = false
                                 }
-                            }))
+                            }
                         Spacer()
                         Text("RIGHT")
                             .foregroundColor(Color.white)
@@ -87,7 +82,7 @@ struct ContentView:View {
                             .cornerRadius(6)
                             .padding(10)
                             .offset(x: 40, y: -20)
-                            .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                            .onTouchDownUpEvent(changeState: { (buttonState) in
                                 if buttonState == .pressed {
                                     rightButtonPressed = true
                                     offSet.width += 100
@@ -95,7 +90,7 @@ struct ContentView:View {
                                 } else {
                                     rightButtonPressed = false
                                 }
-                            }))
+                            })
                         Spacer()
                         Button("FIRE") {
                             self.fireButtonPressed { (success) in
@@ -116,7 +111,7 @@ struct ContentView:View {
                         .cornerRadius(6)
                         .padding(10)
                         .offset(x: 0, y: -30)
-                        .modifier(TouchDownUpEventModifier(changeState: { (buttonState) in
+                        .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 downButtonPressed = true
                                 offSet.height += 100
@@ -124,7 +119,7 @@ struct ContentView:View {
                             } else {
                                 downButtonPressed = false
                             }
-                        }))
+                        }
                 }.offset(x: -60.0, y: -20.0)
             }
         } .statusBar(hidden: true)
