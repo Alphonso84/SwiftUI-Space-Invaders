@@ -14,7 +14,7 @@ struct EnemyShipView:View {
         Image("ufo")
             .resizable()
             .frame(width:70, height:50)
-            .animation(Animation.linear(duration: 4).repeatForever(autoreverses: true))
+            .animation(Animation.linear(duration: 5).repeatForever(autoreverses: true))
         } else {
             EmitterView(particleCount: 200, creationPoint: UnitPoint.top, angle: Angle(degrees:360), angleRange: Angle(degrees:360), opacity: 0.5, opacityRange: 0.4, opacitySpeed: 1, scale: 0.5, scaleRange: 0.4, speed: 200, speedRange: 10, animation: Animation.linear(duration: 10))
         }

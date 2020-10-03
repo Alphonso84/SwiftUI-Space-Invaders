@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+/// we can make the modifier more Swifter by wrapping it in a method...
+/// ... then making the method an extension of View, so we can easily add it to any SwiftUI view
+public extension View {
+    func onTouchDownUpEvent(changeState: @escaping (ButtonState) -> Void) -> some View {
+        modifier(TouchDownUpEventModifier(changeState: changeState))
+    }
+}
+
 struct MyButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
