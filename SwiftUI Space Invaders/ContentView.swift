@@ -28,7 +28,16 @@ struct ContentView:View {
                 Spacer()
                 //MARK:- Ship and Missile Views
                 ZStack {
-                    
+                    AsteroidView()
+                        .offset(enemyPosition())
+                    AsteroidView()
+                        .offset(enemyPosition())
+                    AsteroidView()
+                        .offset(enemyPosition())
+                    AsteroidView()
+                        .offset(enemyPosition())
+                    AsteroidView()
+                        .offset(enemyPosition())
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                     ShipView(currentLocation:characterLocation)
@@ -128,10 +137,10 @@ struct ContentView:View {
     //MARK:- Position Methods
     func enemyPosition() ->CGSize {
         var position = CGSize()
-        let verticalPositionRange = Double.random(in: -600...(-200))
-        let horizontalPositionRange = Double.random(in: -200...200)
+        let verticalPositionRange = Double.random(in: -700...(-100))
+        let horizontalPositionRange = Double.random(in: -200...300)
         position = CGSize(width: horizontalPositionRange , height: verticalPositionRange)
-        print("Enemy horizontal position \(position.width)")
+        print("Asteroid horizontal position \(position.width)")
         return position
     }
     

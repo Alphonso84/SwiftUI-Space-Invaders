@@ -14,9 +14,9 @@ struct MissileView:View {
         VStack{
             Image("bullet")
                 .resizable()
-                .frame(width: 40, height: 20)
+                .frame(width: 10, height: 20)
                 .offset(currentLocation)
-                .shadow(color: .green, radius: 15, x: 0, y: -10)
+                .shadow(color: .white, radius: 15, x: 0, y: -10)
         }
     }
 }
