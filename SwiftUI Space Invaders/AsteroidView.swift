@@ -18,8 +18,10 @@ struct AsteroidView:View {
             .resizable()
             .frame(width:70, height:50)
             .rotationEffect(Angle(degrees: angle))
-                .animation(Animation.linear(duration:Double.random(in: 0...10)).repeatForever(autoreverses: true))
-                .shadow(color: colors.randomElement() ?? .red, radius: 30, x: 0, y: 0)
+                .animation(Animation.linear(duration:Double.random(in: 5...10)).repeatForever(autoreverses: true))
+                .shadow(color:.red, radius: CGFloat(Double.random(in: 5...25)), x: 0, y: 0)
+                .shadow(color: .blue, radius: 25, x: 0, y: 0)
+                .animation(Animation.easeIn(duration: 5))
                 .onAppear {
                     self.angle = Double.random(in: 0...360)
                 }

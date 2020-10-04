@@ -22,16 +22,12 @@ struct ContentView:View {
     var body: some View {
         ZStack {
             //MARK:- Emitter View
-            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.1, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
                 //MARK:- Ship and Missile Views
                 ZStack {
-                    AsteroidView()
-                        .offset(enemyPosition())
-                    AsteroidView()
-                        .offset(enemyPosition())
                     AsteroidView()
                         .offset(enemyPosition())
                     AsteroidView()
