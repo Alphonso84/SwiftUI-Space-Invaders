@@ -20,7 +20,7 @@ struct MyButtonStyle: ButtonStyle {
         configuration.label
             .frame(width: 60, height: 25)
             .foregroundColor(.white)
-            .background(configuration.isPressed ?Color.white: .blue)
+            .background(configuration.isPressed ?Color.white: .red)
             .cornerRadius(10)
     }
 }
