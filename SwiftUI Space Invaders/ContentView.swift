@@ -21,18 +21,18 @@ struct ContentView:View {
     @State private var rightButtonPressed = false
     var body: some View {
         ZStack {
-            //MARK:- Emitter View
-            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            //MARK:- Emitter View Background Stars
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.1, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
-                //MARK:- Ship and Missile Views
+                //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                    EnemyShipView()
+                    AsteroidView()
                         .offset(enemyPosition())
-                    EnemyShipView()
+                    AsteroidView()
                         .offset(enemyPosition())
-                    EnemyShipView()
+                    AsteroidView()
                         .offset(enemyPosition())
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
@@ -130,13 +130,13 @@ struct ContentView:View {
         })
     }
     
-    //MARK:- Enemy Position Method
+    //MARK:- Position Methods
     func enemyPosition() ->CGSize {
         var position = CGSize()
-        let verticalPositionRange = Double.random(in: -600...(-200))
-        let horizontalPositionRange = Double.random(in: -200...200)
+        let verticalPositionRange = Double.random(in: -700...(-100))
+        let horizontalPositionRange = Double.random(in: -200...300)
         position = CGSize(width: horizontalPositionRange , height: verticalPositionRange)
-        print("Enemy horizontal position \(position.width)")
+        print("Asteroid horizontal position \(position.width)")
         return position
     }
     
