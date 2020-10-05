@@ -16,6 +16,7 @@ struct ContentView:View {
     @State private var characterLocation = CGSize()
     @State private var missileLocation = CGSize(width: 0, height: 0)
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
+    @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var upButtonPressed = false
     @State private var downButtonPressed = false
     @State private var leftButtonPressed = false
@@ -33,26 +34,18 @@ struct ContentView:View {
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                    
                     AsteroidView()
-                        .offset(asteroidStartLocation.height >= -800 ? CGSize(width:
-                                                                                CGFloat.random(in: -200...200), height: 1200): CGSize(width:
-                                                                                                    CGFloat.random(in: -200...200), height: -800))
-                       
+                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
                         .animation(.easeIn(duration: 4))
                     AsteroidView()
-                        .offset(asteroidStartLocation.height > -800 ? CGSize(width:
-                                                                                CGFloat.random(in: -200...200), height: 1200): CGSize(width:
-                                                                                                    CGFloat.random(in: -200...200), height: -800))
+                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
                         .animation(.easeIn(duration: 8))
-                    
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                         .opacity(fireButtonPressed ? 1: 0)
                     ShipView(currentLocation:characterLocation)
                         
                 }
-                
                 
                 //MARK:- Button Controls
                 VStack {
@@ -119,11 +112,11 @@ struct ContentView:View {
                             .background(fireButtonPressed ? Color.white: Color.red).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
-                            .offset(x: 10, y: -20)
+                            .offset(x: 30, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
                                     fireButtonPressed = true
-                            
+                                    
                                     self.missileLocation.height = -1200
                                     playWeaponAudio()
                                     print(characterLocation)
@@ -132,8 +125,6 @@ struct ContentView:View {
                                     self.missileLocation = self.offSet
                                 }
                             }
-                        .offset(x: 30.0, y: 0)
-                        
                     }
                     Text("DOWN")
                         .foregroundColor(Color.white)
