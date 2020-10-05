@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct AsteroidView:View {
+    public init() {
+        
+    }
     var asteroids = ["asteroid","asteroid-2","asteroid-3"]
     var colors = [Color.red, Color.white, Color.green, Color.yellow]
     @State var isAlive:Bool = true
@@ -18,10 +21,9 @@ struct AsteroidView:View {
             .resizable()
             .frame(width:70, height:50)
             .rotationEffect(Angle(degrees: angle))
-                .animation(Animation.linear(duration:Double.random(in: 5...10)).repeatForever(autoreverses: true))
+                .animation(.linear(duration:Double.random(in: 5...10)))
                 .shadow(color:.red, radius: CGFloat(Double.random(in: 5...25)), x: 0, y: 0)
                 .shadow(color: .blue, radius: 25, x: 0, y: 0)
-                .animation(Animation.easeIn(duration: 5))
                 .onAppear {
                     self.angle = Double.random(in: 0...360)
                 }
