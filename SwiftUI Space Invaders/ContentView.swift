@@ -23,8 +23,8 @@ struct ContentView:View {
     @State private var rightButtonPressed = false
     @State private var fireButtonPressed = false
     //TODO- Use timer for some task that happens periodically.
-    //let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
+//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.08, on: .main, in: .common).autoconnect()
     var body: some View {
         ZStack {
             //MARK:- Emitter View Background Stars
@@ -43,11 +43,12 @@ struct ContentView:View {
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                         .opacity(fireButtonPressed ? 1: 0)
+                        .shadow(color: .white, radius: 10, x: 0, y: 10)
                     ShipView(currentLocation:characterLocation)
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
-                        .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 30)
+                        .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
                         .shadow(color: .blue, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
-                        .animation(.easeIn(duration:0.5))
+                        .animation(.easeInOut(duration:0.08))
                         
                 }
                 
@@ -62,14 +63,29 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                                offSet.height -= 100
-                                characterLocation = offSet
-                                missileLocation = offSet
-                                print(characterLocation)
+                                
                             } else {
                                 upButtonPressed = false
                             }
                         }
+                        .onReceive(timer) { time in
+                            if upButtonPressed && characterLocation.height >= -900{
+                                offSet.height -= 300
+                                characterLocation = offSet
+                                missileLocation = offSet
+                                print(characterLocation)
+                                        } else {
+                                            
+                                            offSet.height = 0
+                                            characterLocation = offSet
+                                            missileLocation = offSet
+                                           
+                                        }
+//                            offSet.height -= 100
+//                            characterLocation = offSet
+//                            missileLocation = offSet
+//                            print(characterLocation)
+                                    }
                     HStack {
                         Spacer()
                         Text("LEFT")
@@ -156,6 +172,11 @@ struct ContentView:View {
         .onAppear(perform: {
             playMusicAudio()
         })
+    }
+    //MARK:- Position Methods
+    func updatePosition() {
+        
+        offSet.height -= 100
     }
     
     //MARK:- Audio Methods
