@@ -44,6 +44,10 @@ struct ContentView:View {
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                         .opacity(fireButtonPressed ? 1: 0)
                     ShipView(currentLocation:characterLocation)
+                        .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
+                        .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 30)
+                        .shadow(color: .blue, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
+                        .animation(.easeIn(duration:0.5))
                         
                 }
                 
