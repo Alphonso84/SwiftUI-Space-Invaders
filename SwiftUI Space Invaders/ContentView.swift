@@ -25,8 +25,8 @@ struct ContentView:View {
     @State private var leftButtonPressed = false
     @State private var rightButtonPressed = false
     @State private var fireButtonPressed = false
-    //TODO- Use timer for some task that happens periodically.
-//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var currentDevice:Device = .iPhone_11_Pro
+    ///Timer is being used in buttons to allow constantly incrementing offSet value
     let timer = Timer.publish(every: 0.09, on: .main, in: .common).autoconnect()
     var body: some View {
         ZStack {
@@ -75,14 +75,14 @@ struct ContentView:View {
                             }
                         }
                         .onReceive(timer) { time in
-                            if upButtonPressed && characterLocation.height >= -550{
+                            if upButtonPressed && characterLocation.height >= subtractForScreenSize(){
                                 offSet.height -= 30
                                 characterLocation = offSet
                                 missileLocation = offSet
                                 print(characterLocation)
                                         } else {
                                             if offSet.height < 0 {
-                                            offSet.height += 5
+                                            offSet.height += 10
                                             characterLocation = offSet
                                             missileLocation = offSet
                                             }
@@ -182,13 +182,49 @@ struct ContentView:View {
             print(UIScreen.screenSize)
             print(UIScreen.screenWidth)
             print(UIScreen.screenHeight)
-           // playMusicAudio()
+           deviceFromScreenSize()
         })
     }
-    //MARK:- Position Methods
-    func updatePosition() {
-        
-        offSet.height -= 100
+    
+    //MARK:- Device Type/ Screen Size Calc
+    func deviceFromScreenSize() {
+        switch UIScreen.screenHeight {
+        case 1366.0:
+            currentDevice = .iPad_Pro_12inch
+        case 1194.0:
+            currentDevice = .iPad_Pro_11inch
+        case 896.0:
+            currentDevice = .iPhone_11_ProMax
+        case 812.0:
+            currentDevice = .iPhone_11_Pro
+        case 736.0:
+            currentDevice = .iPhone_8_Plus
+        case 667.0:
+            currentDevice = .iPhone_8
+        default:
+            currentDevice = .iPhone_11_Pro
+        }
+    }
+    //0.6773399
+    func subtractForScreenSize() ->CGFloat {
+        var subtractAmount = CGFloat()
+        switch currentDevice {
+        case .iPad_Pro_12inch:
+            subtractAmount = -1080
+        case .iPad_Pro_11inch:
+            subtractAmount = -908
+        case .iPhone_11_ProMax:
+            subtractAmount = -606
+        case .iPhone_11_Pro:
+            subtractAmount = -530
+        case .iPhone_8_Plus:
+            subtractAmount = -488
+        case .iPhone_8:
+            subtractAmount = -410
+        default:
+            subtractAmount = -530
+        }
+        return subtractAmount
     }
     
     //MARK:- Audio Methods
@@ -254,12 +290,6 @@ struct ContentView:View {
             print("No audio file found")
         }
     }
-}
-
-extension UIScreen {
-    static let screenWidth = UIScreen.main.bounds.size.width
-    static let screenHeight = UIScreen.main.bounds.size.height
-    static let screenSize = UIScreen.main.bounds.size
 }
 
 

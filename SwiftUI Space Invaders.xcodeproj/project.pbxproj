@@ -11,6 +11,7 @@
 		D084F3FB252D43150075B596 /* Thruster.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D084F3FA252D43150075B596 /* Thruster.mp3 */; };
 		D084F3FE252D4A3F0075B596 /* ThrusterShutdown.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D084F3FD252D4A3F0075B596 /* ThrusterShutdown.mp3 */; };
 		D09E0DFB25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D09E0DFA25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 */; };
+		D0AACD7F252E4EDF000DEC81 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AACD7E252E4EDF000DEC81 /* Helper.swift */; };
 		D0D4F53425225C3300900D9F /* SwiftUI_Space_InvadersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */; };
 		D0D4F53625225C3300900D9F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D4F53525225C3300900D9F /* ContentView.swift */; };
 		D0D4F53825225C3500900D9F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0D4F53725225C3500900D9F /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		D084F3FA252D43150075B596 /* Thruster.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Thruster.mp3; sourceTree = "<group>"; };
 		D084F3FD252D4A3F0075B596 /* ThrusterShutdown.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ThrusterShutdown.mp3; sourceTree = "<group>"; };
 		D09E0DFA25267D450067E6DD /* ES_Ultramarine - Aleph One.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ES_Ultramarine - Aleph One.mp3"; sourceTree = "<group>"; };
+		D0AACD7E252E4EDF000DEC81 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D0D4F53025225C3300900D9F /* SwiftUI Space Invaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI Space Invaders.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_Space_InvadersApp.swift; sourceTree = "<group>"; };
 		D0D4F53525225C3300900D9F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */,
 				D0D4F53525225C3300900D9F /* ContentView.swift */,
 				D03EB08F2526E9F300ED5046 /* MyButtonStyle.swift */,
+				D0AACD7E252E4EDF000DEC81 /* Helper.swift */,
 				D0D4F55325240F8100900D9F /* EmitterView.swift */,
 				D0D4F5432522E47000900D9F /* ShipView.swift */,
 				D0D4F5572525554200900D9F /* AsteroidView.swift */,
@@ -180,6 +183,7 @@
 				D0D4F5582525554200900D9F /* AsteroidView.swift in Sources */,
 				D0D4F55425240F8100900D9F /* EmitterView.swift in Sources */,
 				D0D4F53425225C3300900D9F /* SwiftUI_Space_InvadersApp.swift in Sources */,
+				D0AACD7F252E4EDF000DEC81 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
