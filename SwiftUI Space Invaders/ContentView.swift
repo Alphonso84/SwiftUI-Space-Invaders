@@ -24,7 +24,7 @@ struct ContentView:View {
     @State private var fireButtonPressed = false
     //TODO- Use timer for some task that happens periodically.
 //    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    let timer = Timer.publish(every: 0.08, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.09, on: .main, in: .common).autoconnect()
     var body: some View {
         ZStack {
             //MARK:- Emitter View Background Stars
@@ -47,8 +47,9 @@ struct ContentView:View {
                     ShipView(currentLocation:characterLocation)
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
                         .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
+                        .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
                         .shadow(color: .blue, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
-                        .animation(.easeInOut(duration:0.08))
+                        .animation(.easeInOut(duration:0.09))
                         
                 }
                 
@@ -69,22 +70,18 @@ struct ContentView:View {
                             }
                         }
                         .onReceive(timer) { time in
-                            if upButtonPressed && characterLocation.height >= -900{
-                                offSet.height -= 300
+                            if upButtonPressed && characterLocation.height >= -550{
+                                offSet.height -= 30
                                 characterLocation = offSet
                                 missileLocation = offSet
                                 print(characterLocation)
                                         } else {
-                                            
-                                            offSet.height = 0
+                                            if offSet.height < 0 {
+                                            offSet.height += 5
                                             characterLocation = offSet
                                             missileLocation = offSet
-                                           
+                                            }
                                         }
-//                            offSet.height -= 100
-//                            characterLocation = offSet
-//                            missileLocation = offSet
-//                            print(characterLocation)
                                     }
                     HStack {
                         Spacer()
@@ -97,15 +94,25 @@ struct ContentView:View {
                             .offset(x: 30, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
-                                    leftButtonPressed = true
-                                    offSet.width -= 100
+                                   leftButtonPressed = true
+                                } else {
+                                   leftButtonPressed = false
+                                }
+                            }
+                            .onReceive(timer) { time in
+                                if leftButtonPressed && characterLocation.width >= -170{
+                                    offSet.width -= 20
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
-                                } else {
-                                    leftButtonPressed = false
-                                }
-                            }
+                                            } else {
+                                                if offSet.width < 0 {
+                                                offSet.width += 5
+                                                characterLocation = offSet
+                                                missileLocation = offSet
+                                                }
+                                            }
+                                        }
                         Spacer()
                         Text("RIGHT")
                             .foregroundColor(Color.white)
@@ -114,17 +121,28 @@ struct ContentView:View {
                             .cornerRadius(6)
                             .padding(10)
                             .offset(x: 50, y: -20)
-                            .onTouchDownUpEvent(changeState: { (buttonState) in
+                            .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
                                     rightButtonPressed = true
-                                    offSet.width += 100
-                                    characterLocation = offSet
-                                    missileLocation = offSet
-                                    print(characterLocation)
+                                    
                                 } else {
                                     rightButtonPressed = false
                                 }
-                            })
+                            }
+                            .onReceive(timer) { time in
+                                if rightButtonPressed && characterLocation.width <= 170{
+                                    offSet.width += 20
+                                    characterLocation = offSet
+                                    missileLocation = offSet
+                                    print(characterLocation)
+                                            } else {
+                                                if offSet.width > 0 {
+                                                offSet.width -= 5
+                                                characterLocation = offSet
+                                                missileLocation = offSet
+                                                }
+                                            }
+                                        }
                         Spacer()
                         Text("FIRE")
                             .foregroundColor(Color.white)
@@ -156,14 +174,19 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 downButtonPressed = true
-                                offSet.height += 100
-                                characterLocation = offSet
-                                missileLocation = offSet
-                                print(characterLocation)
                             } else {
                                 downButtonPressed = false
                             }
                         }
+                        .onReceive(timer) { time in
+                            if downButtonPressed && characterLocation.height <= 0{
+                                offSet.height += 20
+                                characterLocation = offSet
+                                missileLocation = offSet
+                                print(characterLocation)
+                            }
+                        }
+                                    
                 }.offset(x: -60.0, y: -20.0)
             }
         } .statusBar(hidden: true)
