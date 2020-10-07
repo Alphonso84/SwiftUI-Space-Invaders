@@ -96,7 +96,7 @@ struct ContentView:View {
                             .background(leftButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
-                            .offset(x: 30, y: -20)
+                            .offset(x: -10, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
                                    leftButtonPressed = true
@@ -125,7 +125,7 @@ struct ContentView:View {
                             .background(rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
-                            .offset(x: 50, y: -20)
+                            .offset(x: 10, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
                                     rightButtonPressed = true
@@ -149,25 +149,6 @@ struct ContentView:View {
                                             }
                                         }
                         Spacer()
-                        Text("FIRE")
-                            .foregroundColor(Color.white)
-                            .padding(10)
-                            .background(fireButtonPressed ? Color.white: Color.red).animation(.easeInOut(duration: 0.2))
-                            .cornerRadius(6)
-                            .padding(10)
-                            .offset(x: 30, y: -20)
-                            .onTouchDownUpEvent { (buttonState) in
-                                if buttonState == .pressed {
-                                    fireButtonPressed = true
-                                    
-                                    self.missileLocation.height = -1200
-                                    playWeaponAudio()
-                                    print(characterLocation)
-                                } else {
-                                    fireButtonPressed = false
-                                    self.missileLocation = self.offSet
-                                }
-                            }
                     }
                     Text("DOWN")
                         .foregroundColor(Color.white)
@@ -192,7 +173,7 @@ struct ContentView:View {
                             }
                         }
                                     
-                }.offset(x: -60.0, y: -20.0)
+                }
             }
         } .statusBar(hidden: true)
         .background(Color.black)
