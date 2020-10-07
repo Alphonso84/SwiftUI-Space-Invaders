@@ -19,6 +19,7 @@ struct ContentView:View {
     @State private var missileLocation = CGSize(width: 0, height: 0)
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
+    @State private var isTablet = false
     @State private var upButtonPressed = false
     @State private var downButtonPressed = false
     @State private var leftButtonPressed = false
@@ -30,18 +31,18 @@ struct ContentView:View {
     var body: some View {
         ZStack {
             //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 150, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+//            EmitterView(particleCount: 150, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                    AsteroidView()
-                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
-                        .animation(.easeIn(duration: 4))
-                    AsteroidView()
-                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
-                        .animation(.easeIn(duration: 8))
+//                    AsteroidView()
+//                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
+//                        .animation(.easeIn(duration: 4))
+//                    AsteroidView()
+//                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
+//                        .animation(.easeIn(duration: 8))
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
                         .opacity(fireButtonPressed ? 1: 0)
@@ -197,6 +198,9 @@ struct ContentView:View {
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
+            print(UIScreen.screenSize)
+            print(UIScreen.screenWidth)
+            print(UIScreen.screenHeight)
            // playMusicAudio()
         })
     }
@@ -269,6 +273,12 @@ struct ContentView:View {
             print("No audio file found")
         }
     }
+}
+
+extension UIScreen {
+    static let screenWidth = UIScreen.main.bounds.size.width
+    static let screenHeight = UIScreen.main.bounds.size.height
+    static let screenSize = UIScreen.main.bounds.size
 }
 
 
