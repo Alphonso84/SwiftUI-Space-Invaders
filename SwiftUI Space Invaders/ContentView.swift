@@ -11,6 +11,7 @@ import AVFoundation
 struct ContentView:View {
     //MARK:- ContentView Properties
     @State private var laserSound: AVAudioPlayer?
+    @State private var mainThrusterSound: AVAudioPlayer?
     @State private var gameMusic: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize()
@@ -64,9 +65,10 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                                
+                                playThrusterAudio()
                             } else {
                                 upButtonPressed = false
+                                playThrusterAudio()
                             }
                         }
                         .onReceive(timer) { time in
@@ -193,7 +195,7 @@ struct ContentView:View {
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
-            playMusicAudio()
+           // playMusicAudio()
         })
     }
     //MARK:- Position Methods
@@ -209,6 +211,24 @@ struct ContentView:View {
                 try self.gameMusic = AVAudioPlayer(contentsOf: audioURL)
                 self.gameMusic?.numberOfLoops = 1
                 self.gameMusic?.play()
+            } catch {
+                print("Couldn't play audio Error: \(error)")
+            }
+        } else {
+            print("No audio file found")
+        }
+    }
+    
+    func playThrusterAudio() {
+        if let audioURL = Bundle.main.url(forResource: "Thruster", withExtension: "mp3") {
+            do {
+                try self.mainThrusterSound = AVAudioPlayer(contentsOf: audioURL)
+                self.mainThrusterSound?.numberOfLoops = 1
+                if upButtonPressed {
+                self.mainThrusterSound?.play()
+                } else if upButtonPressed == false {
+                    self.mainThrusterSound?.stop()
+                }
             } catch {
                 print("Couldn't play audio Error: \(error)")
             }
