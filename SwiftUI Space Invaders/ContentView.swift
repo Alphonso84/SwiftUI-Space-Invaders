@@ -12,6 +12,7 @@ struct ContentView:View {
     //MARK:- ContentView Properties
     @State private var laserSound: AVAudioPlayer?
     @State private var mainThrusterSound: AVAudioPlayer?
+    @State private var mainThrusterShutdownSound: AVAudioPlayer?
     @State private var gameMusic: AVAudioPlayer?
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize()
@@ -69,6 +70,7 @@ struct ContentView:View {
                             } else {
                                 upButtonPressed = false
                                 playThrusterAudio()
+                               // playThrusterShutdownAudio()
                             }
                         }
                         .onReceive(timer) { time in
@@ -225,10 +227,27 @@ struct ContentView:View {
                 try self.mainThrusterSound = AVAudioPlayer(contentsOf: audioURL)
                 self.mainThrusterSound?.numberOfLoops = 1
                 if upButtonPressed {
+                self.mainThrusterShutdownSound?.stop()
                 self.mainThrusterSound?.play()
                 } else if upButtonPressed == false {
                     self.mainThrusterSound?.stop()
                 }
+            } catch {
+                print("Couldn't play audio Error: \(error)")
+            }
+        } else {
+            print("No audio file found")
+        }
+    }
+    
+    func playThrusterShutdownAudio() {
+        if let audioURL = Bundle.main.url(forResource: "ThrusterShutdown", withExtension: "mp3") {
+            do {
+                try self.mainThrusterShutdownSound = AVAudioPlayer(contentsOf: audioURL)
+                self.mainThrusterShutdownSound?.numberOfLoops = 0
+                self.mainThrusterSound?.stop()
+                self.mainThrusterShutdownSound?.play()              
+               
             } catch {
                 print("Couldn't play audio Error: \(error)")
             }
