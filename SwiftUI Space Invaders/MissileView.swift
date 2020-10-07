@@ -16,7 +16,7 @@ struct MissileView:View {
                 .resizable()
                 .frame(width: 10, height: 20)
                 .offset(currentLocation)
-                .shadow(color: .white, radius: 15, x: 0, y: -10)
+                .shadow(color: .red, radius: 25, x: 0, y: -20)
         }
     }
 }

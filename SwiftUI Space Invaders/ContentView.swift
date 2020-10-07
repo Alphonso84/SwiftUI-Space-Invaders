@@ -15,28 +15,42 @@ struct ContentView:View {
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize()
     @State private var missileLocation = CGSize(width: 0, height: 0)
+    @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
+    @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var upButtonPressed = false
     @State private var downButtonPressed = false
     @State private var leftButtonPressed = false
     @State private var rightButtonPressed = false
+    @State private var fireButtonPressed = false
+    //TODO- Use timer for some task that happens periodically.
+//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.09, on: .main, in: .common).autoconnect()
     var body: some View {
         ZStack {
             //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.1, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 150, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
                     AsteroidView()
-                        .offset(enemyPosition())
+                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
+                        .animation(.easeIn(duration: 4))
                     AsteroidView()
-                        .offset(enemyPosition())
-                    AsteroidView()
-                        .offset(enemyPosition())
+                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
+                        .animation(.easeIn(duration: 8))
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
+                        .opacity(fireButtonPressed ? 1: 0)
+                        .shadow(color: .white, radius: 10, x: 0, y: 10)
                     ShipView(currentLocation:characterLocation)
+                        .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
+                        .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
+                        .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
+                        .shadow(color: .blue, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
+                        .animation(.easeInOut(duration:0.09))
+                        
                 }
                 
                 //MARK:- Button Controls
@@ -50,12 +64,25 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                                offSet.height -= 100
-                                characterLocation = offSet
+                                
                             } else {
                                 upButtonPressed = false
                             }
                         }
+                        .onReceive(timer) { time in
+                            if upButtonPressed && characterLocation.height >= -550{
+                                offSet.height -= 30
+                                characterLocation = offSet
+                                missileLocation = offSet
+                                print(characterLocation)
+                                        } else {
+                                            if offSet.height < 0 {
+                                            offSet.height += 5
+                                            characterLocation = offSet
+                                            missileLocation = offSet
+                                            }
+                                        }
+                                    }
                     HStack {
                         Spacer()
                         Text("LEFT")
@@ -67,13 +94,25 @@ struct ContentView:View {
                             .offset(x: 30, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
-                                    leftButtonPressed = true
-                                    offSet.width -= 100
-                                    characterLocation = offSet
+                                   leftButtonPressed = true
                                 } else {
-                                    leftButtonPressed = false
+                                   leftButtonPressed = false
                                 }
                             }
+                            .onReceive(timer) { time in
+                                if leftButtonPressed && characterLocation.width >= -170{
+                                    offSet.width -= 20
+                                    characterLocation = offSet
+                                    missileLocation = offSet
+                                    print(characterLocation)
+                                            } else {
+                                                if offSet.width < 0 {
+                                                offSet.width += 5
+                                                characterLocation = offSet
+                                                missileLocation = offSet
+                                                }
+                                            }
+                                        }
                         Spacer()
                         Text("RIGHT")
                             .foregroundColor(Color.white)
@@ -81,28 +120,49 @@ struct ContentView:View {
                             .background(rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
-                            .offset(x: 40, y: -20)
-                            .onTouchDownUpEvent(changeState: { (buttonState) in
+                            .offset(x: 50, y: -20)
+                            .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
                                     rightButtonPressed = true
-                                    offSet.width += 100
-                                    characterLocation = offSet
+                                    
                                 } else {
                                     rightButtonPressed = false
                                 }
-                            })
+                            }
+                            .onReceive(timer) { time in
+                                if rightButtonPressed && characterLocation.width <= 170{
+                                    offSet.width += 20
+                                    characterLocation = offSet
+                                    missileLocation = offSet
+                                    print(characterLocation)
+                                            } else {
+                                                if offSet.width > 0 {
+                                                offSet.width -= 5
+                                                characterLocation = offSet
+                                                missileLocation = offSet
+                                                }
+                                            }
+                                        }
                         Spacer()
-                        Button("FIRE") {
-                            self.fireButtonPressed { (success) in
-                                if success {
-                                    self.missileLocation.height -= 1300
+                        Text("FIRE")
+                            .foregroundColor(Color.white)
+                            .padding(10)
+                            .background(fireButtonPressed ? Color.white: Color.red).animation(.easeInOut(duration: 0.2))
+                            .cornerRadius(6)
+                            .padding(10)
+                            .offset(x: 30, y: -20)
+                            .onTouchDownUpEvent { (buttonState) in
+                                if buttonState == .pressed {
+                                    fireButtonPressed = true
+                                    
+                                    self.missileLocation.height = -1200
                                     playWeaponAudio()
+                                    print(characterLocation)
+                                } else {
+                                    fireButtonPressed = false
+                                    self.missileLocation = self.offSet
                                 }
                             }
-                        }
-                        .buttonStyle(MyButtonStyle())
-                        .offset(x: 30.0, y: 0)
-                        .foregroundColor(.red)
                     }
                     Text("DOWN")
                         .foregroundColor(Color.white)
@@ -114,12 +174,19 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 downButtonPressed = true
-                                offSet.height += 100
-                                characterLocation = offSet
                             } else {
                                 downButtonPressed = false
                             }
                         }
+                        .onReceive(timer) { time in
+                            if downButtonPressed && characterLocation.height <= 0{
+                                offSet.height += 20
+                                characterLocation = offSet
+                                missileLocation = offSet
+                                print(characterLocation)
+                            }
+                        }
+                                    
                 }.offset(x: -60.0, y: -20.0)
             }
         } .statusBar(hidden: true)
@@ -129,15 +196,10 @@ struct ContentView:View {
             playMusicAudio()
         })
     }
-    
     //MARK:- Position Methods
-    func enemyPosition() ->CGSize {
-        var position = CGSize()
-        let verticalPositionRange = Double.random(in: -700...(-100))
-        let horizontalPositionRange = Double.random(in: -200...300)
-        position = CGSize(width: horizontalPositionRange , height: verticalPositionRange)
-        print("Asteroid horizontal position \(position.width)")
-        return position
+    func updatePosition() {
+        
+        offSet.height -= 100
     }
     
     //MARK:- Audio Methods
@@ -167,33 +229,6 @@ struct ContentView:View {
         } else {
             print("No audio file found")
         }
-    }
-    //MARK:- Button Methods
-    func fireButtonPressed(completion: (_ success:Bool) ->Void) {
-        withAnimation(.linear) {
-            playWeaponAudio()
-            self.missileLocation = self.offSet
-        }
-        completion(true)
-    }
-    func downButtonIsPressed(){
-        offSet.height += 100
-        self.characterLocation = offSet
-    }
-    
-    func upButtonIsPressed(){
-        offSet.height -= 100
-        characterLocation = offSet
-    }
-    
-    func rightButtonIsPressed(){
-        offSet.width += 100
-        characterLocation = offSet
-    }
-    
-    func leftButtonIsPressed(){
-        offSet.width -= 100
-        characterLocation = offSet
     }
 }
 
