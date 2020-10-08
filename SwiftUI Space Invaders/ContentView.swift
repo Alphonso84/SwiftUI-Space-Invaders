@@ -9,39 +9,55 @@ import SwiftUI
 import AVFoundation
 
 struct ContentView:View {
-    //MARK:- ContentView Properties
+    //MARK:- Audio Properties
     @State private var laserSound: AVAudioPlayer?
     @State private var mainThrusterSound: AVAudioPlayer?
     @State private var mainThrusterShutdownSound: AVAudioPlayer?
     @State private var gameMusic: AVAudioPlayer?
+    //MARK:- Location Properties
     @State private var offSet = CGSize(width: 0, height: 0)
     @State private var characterLocation = CGSize()
     @State private var missileLocation = CGSize(width: 0, height: 0)
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
-    @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
-    @State private var isTablet = false
+    @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
+    //MARK:- Controll Properties
     @State private var upButtonPressed = false
     @State private var downButtonPressed = false
     @State private var leftButtonPressed = false
     @State private var rightButtonPressed = false
     @State private var fireButtonPressed = false
+    //MARK:- Background Properties
+    @State private var myBackGround = [.blue,Color(UIColor.blue), .black, .black]
+    @State private var myBackGround2 = [.blue,.blue,Color(UIColor.blue),Color(UIColor.blue)]
+    @State private var myBackGround3 = [.blue,.blue,Color(UIColor.blue),.black]
+    @State var startPoint = UnitPoint(x: 0, y: 1)
+    @State var endPoint = UnitPoint(x: 0, y: 0)
+    //MARK:- Device Properties
+    @State private var isTablet = false
     @State private var currentDevice:Device = .iPhone_11_Pro
+    func simpleSuccess() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.warning)
+    }
     ///Timer is being used in buttons to allow constantly incrementing offSet value
     let timer = Timer.publish(every: 0.09, on: .main, in: .common).autoconnect()
     var body: some View {
+        
         ZStack {
             //MARK:- Emitter View Background Stars
-//            EmitterView(particleCount: 150, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 100, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 15, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 4).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
+               
                 ZStack {
 //                    AsteroidView()
-//                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
+//                        .offset(asteroidStartLocation.height >= -200 ? asteroidEndLocation : asteroidStartLocation)
 //                        .animation(.easeIn(duration: 4))
 //                    AsteroidView()
-//                        .offset(asteroidStartLocation.height >= -800 ? asteroidEndLocation : asteroidStartLocation)
+//                        .offset(asteroidStartLocation.height >= -200 ? asteroidEndLocation : asteroidStartLocation)
 //                        .animation(.easeIn(duration: 8))
                     MissileView(currentLocation: missileLocation)
                         .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
@@ -53,30 +69,37 @@ struct ContentView:View {
                         .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
                         .shadow(color: .blue, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
                         .animation(.easeInOut(duration:0.09))
-                        
+                
+                  
                 }
                 
                 //MARK:- Button Controls
                 VStack {
                     Text("UP")
                         .foregroundColor(Color.white)
-                        .padding(10)
+                        .padding(.leading,20)
+                        .padding(.trailing,20)
+                        .padding(.top,10)
+                        .padding(.bottom,10)
                         .background(upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
                         .cornerRadius(6)
-                        .padding(10)
+                        
+                        
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                                playThrusterAudio()
+                            playThrusterAudio()
+                                
                             } else {
                                 upButtonPressed = false
-                                playThrusterAudio()
-                               // playThrusterShutdownAudio()
+                                //playThrusterAudio()
+                                playThrusterShutdownAudio()
                             }
                         }
                         .onReceive(timer) { time in
-                            if upButtonPressed && characterLocation.height >= subtractForScreenSize(){
+                            if upButtonPressed && characterLocation.height >= subtractForVerticalScreenSize(){
                                 offSet.height -= 30
+                               // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
                                 print(characterLocation)
@@ -85,6 +108,7 @@ struct ContentView:View {
                                             offSet.height += 10
                                             characterLocation = offSet
                                             missileLocation = offSet
+                                  
                                             }
                                         }
                                     }
@@ -105,8 +129,9 @@ struct ContentView:View {
                                 }
                             }
                             .onReceive(timer) { time in
-                                if leftButtonPressed && characterLocation.width >= -170{
+                                if leftButtonPressed && characterLocation.width >= -deltaForHorizontalScreenSize(){
                                     offSet.width -= 20
+                                   // simpleSuccess()
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
@@ -135,8 +160,9 @@ struct ContentView:View {
                                 }
                             }
                             .onReceive(timer) { time in
-                                if rightButtonPressed && characterLocation.width <= 170{
+                                if rightButtonPressed && characterLocation.width <= deltaForHorizontalScreenSize(){
                                     offSet.width += 20
+                                  //  simpleSuccess()
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
@@ -151,7 +177,7 @@ struct ContentView:View {
                         Spacer()
                     }
                     Text("DOWN")
-                        .foregroundColor(Color.white)
+                        .foregroundColor(downButtonPressed ? Color.white: Color.black)
                         .padding(10)
                         .background(downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                         .cornerRadius(6)
@@ -167,6 +193,7 @@ struct ContentView:View {
                         .onReceive(timer) { time in
                             if downButtonPressed && characterLocation.height <= 0{
                                 offSet.height += 20
+                               // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
                                 print(characterLocation)
@@ -176,14 +203,14 @@ struct ContentView:View {
                 }
             }
         } .statusBar(hidden: true)
-        .background(Color.black)
-        .edgesIgnoringSafeArea(.all)
+        .background(LinearGradient(gradient: Gradient(colors: myBackGround), startPoint: startPoint, endPoint: endPoint))
+        
         .onAppear(perform: {
-            print(UIScreen.screenSize)
-            print(UIScreen.screenWidth)
-            print(UIScreen.screenHeight)
+           playMusicAudio()
            deviceFromScreenSize()
+           print("DEVICE DETECTED: \(currentDevice)")
         })
+        .edgesIgnoringSafeArea(.all)
     }
     
     //MARK:- Device Type/ Screen Size Calc
@@ -206,7 +233,7 @@ struct ContentView:View {
         }
     }
     //0.6773399
-    func subtractForScreenSize() ->CGFloat {
+    func subtractForVerticalScreenSize() ->CGFloat {
         var subtractAmount = CGFloat()
         switch currentDevice {
         case .iPad_Pro_12inch:
@@ -227,12 +254,36 @@ struct ContentView:View {
         return subtractAmount
     }
     
+    func deltaForHorizontalScreenSize() ->CGFloat {
+        var subtractAmount = CGFloat()
+        switch currentDevice {
+        case .iPad_Pro_12inch:
+            subtractAmount = 440
+        case .iPad_Pro_11inch:
+            subtractAmount = 340
+        case .iPhone_11_ProMax:
+            subtractAmount = 170
+        case .iPhone_11_Pro:
+            subtractAmount = 160
+        case .iPhone_8_Plus:
+            subtractAmount = 160
+        case .iPhone_8:
+            subtractAmount = 160
+        default:
+            subtractAmount = 160
+        }
+        return subtractAmount
+    }
+    
+   
     //MARK:- Audio Methods
     func playMusicAudio() {
         if let audioURL = Bundle.main.url(forResource: "ES_Ultramarine - Aleph One", withExtension: "mp3") {
             do {
                 try self.gameMusic = AVAudioPlayer(contentsOf: audioURL)
                 self.gameMusic?.numberOfLoops = 1
+                self.gameMusic?.prepareToPlay()
+                self.gameMusic?.volume = 0.3
                 self.gameMusic?.play()
             } catch {
                 print("Couldn't play audio Error: \(error)")
@@ -249,7 +300,10 @@ struct ContentView:View {
                 self.mainThrusterSound?.numberOfLoops = 1
                 if upButtonPressed {
                 self.mainThrusterShutdownSound?.stop()
+                self.mainThrusterSound?.prepareToPlay()
+                    self.mainThrusterSound?.volume = 1
                 self.mainThrusterSound?.play()
+                    
                 } else if upButtonPressed == false {
                     self.mainThrusterSound?.stop()
                 }
@@ -267,6 +321,8 @@ struct ContentView:View {
                 try self.mainThrusterShutdownSound = AVAudioPlayer(contentsOf: audioURL)
                 self.mainThrusterShutdownSound?.numberOfLoops = 0
                 self.mainThrusterSound?.stop()
+                self.mainThrusterShutdownSound?.prepareToPlay()
+                self.mainThrusterShutdownSound?.volume = 0.3
                 self.mainThrusterShutdownSound?.play()              
                
             } catch {
