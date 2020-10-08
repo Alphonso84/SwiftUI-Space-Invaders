@@ -20,6 +20,8 @@ struct ContentView:View {
     @State private var missileLocation = CGSize(width: 0, height: 0)
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
+    @State private var speed = 0.8
+    @State private var emitterParticleCreatePoint = CGFloat(-0.1)
     //MARK:- Controll Properties
     @State private var upButtonPressed = false
     @State private var downButtonPressed = false
@@ -45,8 +47,8 @@ struct ContentView:View {
         
         ZStack {
             //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 100, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
-            EmitterView(particleCount: 15, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 900, speedRange: 400, animation: Animation.linear(duration: 4).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 100, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 850, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+           // EmitterView(particleCount: 15, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 800, speedRange: 400, animation: Animation.linear(duration: ).repeatForever(autoreverses: false),animationDelayThreshold: 3)
             
             VStack{
                 Spacer()
@@ -92,7 +94,9 @@ struct ContentView:View {
                                 
                             } else {
                                 upButtonPressed = false
-                                //playThrusterAudio()
+                                withAnimation (.easeInOut(duration: 20)){
+                                    self.startPoint.y = 1
+                                }
                                 playThrusterShutdownAudio()
                             }
                         }
@@ -102,10 +106,14 @@ struct ContentView:View {
                                // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
+                                withAnimation (.easeInOut(duration: 20)){
+                                    self.startPoint.y = 3
+                                }
                                 print(characterLocation)
                                         } else {
                                             if offSet.height < 0 {
-                                            offSet.height += 10
+                                            offSet.height += 3
+                                                
                                             characterLocation = offSet
                                             missileLocation = offSet
                                   
@@ -206,7 +214,7 @@ struct ContentView:View {
         .background(LinearGradient(gradient: Gradient(colors: myBackGround), startPoint: startPoint, endPoint: endPoint))
         
         .onAppear(perform: {
-           playMusicAudio()
+           //playMusicAudio()
            deviceFromScreenSize()
            print("DEVICE DETECTED: \(currentDevice)")
         })
