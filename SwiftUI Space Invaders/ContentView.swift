@@ -20,7 +20,8 @@ struct ContentView:View {
     @State private var missileLocation = CGSize(width: 0, height: 0)
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
-    @State private var speed = 0.8
+    @State private var speed = 850.0
+    @State private var opacity = 0.0
     @State private var emitterParticleCreatePoint = CGFloat(-0.1)
     //MARK:- Controll Properties
     @State private var upButtonPressed = false
@@ -29,7 +30,7 @@ struct ContentView:View {
     @State private var rightButtonPressed = false
     @State private var fireButtonPressed = false
     //MARK:- Background Properties
-    @State private var myBackGround = [.blue,Color(UIColor.blue), .black, .black]
+    @State private var myBackGround = [Color(UIColor.blue),Color(UIColor.blue),Color(UIColor.blue),.blue, .black, .black, .black]
     @State private var myBackGround2 = [.blue,.blue,Color(UIColor.blue),Color(UIColor.blue)]
     @State private var myBackGround3 = [.blue,.blue,Color(UIColor.blue),.black]
     @State var startPoint = UnitPoint(x: 0, y: 1)
@@ -47,8 +48,10 @@ struct ContentView:View {
         
         ZStack {
             //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 100, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 850, speedRange: 400, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
-           // EmitterView(particleCount: 15, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 800, speedRange: 400, animation: Animation.linear(duration: ).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 100, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180),angleRange: Angle(degrees:0), scale: 0.05, scaleRange: 0.1, speed: 850, speedRange: 0, animation: Animation.linear(duration: 2).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+                .opacity(opacity)
+            EmitterView(particleCount: 15, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 400, speedRange: 400, animation: Animation.linear(duration: 2).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+                .opacity(opacity)
             
             VStack{
                 Spacer()
@@ -96,18 +99,21 @@ struct ContentView:View {
                                 upButtonPressed = false
                                 withAnimation (.easeInOut(duration: 20)){
                                     self.startPoint.y = 1
+                                    opacity = 0.0
+                                    
                                 }
                                 playThrusterShutdownAudio()
                             }
                         }
                         .onReceive(timer) { time in
                             if upButtonPressed && characterLocation.height >= subtractForVerticalScreenSize(){
-                                offSet.height -= 30
+                                offSet.height -= 10
                                // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
                                 withAnimation (.easeInOut(duration: 20)){
                                     self.startPoint.y = 3
+                                    opacity = 1.0
                                 }
                                 print(characterLocation)
                                         } else {
@@ -185,7 +191,7 @@ struct ContentView:View {
                         Spacer()
                     }
                     Text("DOWN")
-                        .foregroundColor(downButtonPressed ? Color.white: Color.black)
+                        .foregroundColor(downButtonPressed ? Color.white: Color.white)
                         .padding(10)
                         .background(downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                         .cornerRadius(6)
