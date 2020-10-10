@@ -11,6 +11,7 @@ import SwiftUI
 enum Device {
     case iPad_Pro_12inch
     case iPad_Pro_11inch
+    case iPad_Standard
     case iPhone_11_ProMax
     case iPhone_11_Pro
     case iPhone_8_Plus

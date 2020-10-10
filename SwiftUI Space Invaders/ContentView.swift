@@ -33,7 +33,7 @@ struct ContentView:View {
     @State private var myBackGround = [Color(UIColor.blue),Color(UIColor.blue),Color(UIColor.blue),.blue, .black, .black, .black]
     @State private var myBackGround2 = [.blue,.blue,Color(UIColor.blue),Color(UIColor.blue)]
     @State private var myBackGround3 = [.blue,.blue,Color(UIColor.blue),.black]
-    @State var startPoint = UnitPoint(x: 0, y: 1)
+    @State var startPoint = UnitPoint(x: 0, y: 0.01)
     @State var endPoint = UnitPoint(x: 0, y: 0)
     //MARK:- Device Properties
     @State private var isTablet = false
@@ -48,36 +48,20 @@ struct ContentView:View {
         
         ZStack {
             //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 100, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180),angleRange: Angle(degrees:0), scale: 0.05, scaleRange: 0.1, speed: 850, speedRange: 0, animation: Animation.linear(duration: 2).repeatForever(autoreverses: false),animationDelayThreshold: 3)
-                .opacity(opacity)
-            EmitterView(particleCount: 15, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180), scale: 0.05, scaleRange: 0.1, speed: 400, speedRange: 400, animation: Animation.linear(duration: 2).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 200, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180),scale: 0.05, scaleRange: 0.1, speed: 825, speedRange: 2, animation: Animation.linear(duration: 4.0).repeatForever(autoreverses: false),animationDelayThreshold: 6)
                 .opacity(opacity)
             
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
-               
                 ZStack {
-//                    AsteroidView()
-//                        .offset(asteroidStartLocation.height >= -200 ? asteroidEndLocation : asteroidStartLocation)
-//                        .animation(.easeIn(duration: 4))
-//                    AsteroidView()
-//                        .offset(asteroidStartLocation.height >= -200 ? asteroidEndLocation : asteroidStartLocation)
-//                        .animation(.easeIn(duration: 8))
-                    MissileView(currentLocation: missileLocation)
-                        .animation(Animation.easeIn(duration: 0.2).repeatCount(2, autoreverses: false))
-                        .opacity(fireButtonPressed ? 1: 0)
-                        .shadow(color: .white, radius: 10, x: 0, y: 10)
                     ShipView(currentLocation:characterLocation)
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
                         .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
                         .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
-                        .shadow(color: .blue, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
+                        .shadow(color: .white, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
                         .animation(.easeInOut(duration:0.09))
-                
-                  
                 }
-                
                 //MARK:- Button Controls
                 VStack {
                     Text("UP")
@@ -88,19 +72,15 @@ struct ContentView:View {
                         .padding(.bottom,10)
                         .background(upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
                         .cornerRadius(6)
-                        
-                        
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
                             playThrusterAudio()
-                                
                             } else {
                                 upButtonPressed = false
                                 withAnimation (.easeInOut(duration: 20)){
-                                    self.startPoint.y = 1
+                                    self.startPoint.y = 0.1
                                     opacity = 0.0
-                                    
                                 }
                                 playThrusterShutdownAudio()
                             }
@@ -111,8 +91,8 @@ struct ContentView:View {
                                // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
-                                withAnimation (.easeInOut(duration: 20)){
-                                    self.startPoint.y = 3
+                                withAnimation (.easeInOut(duration:25)){
+                                    self.startPoint.y = 3.8
                                     opacity = 1.0
                                 }
                                 print(characterLocation)
@@ -218,13 +198,14 @@ struct ContentView:View {
             }
         } .statusBar(hidden: true)
         .background(LinearGradient(gradient: Gradient(colors: myBackGround), startPoint: startPoint, endPoint: endPoint))
-        
+        .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
            //playMusicAudio()
            deviceFromScreenSize()
+            print(UIScreen.screenHeight)
            print("DEVICE DETECTED: \(currentDevice)")
         })
-        .edgesIgnoringSafeArea(.all)
+        
     }
     
     //MARK:- Device Type/ Screen Size Calc
@@ -234,6 +215,8 @@ struct ContentView:View {
             currentDevice = .iPad_Pro_12inch
         case 1194.0:
             currentDevice = .iPad_Pro_11inch
+        case 1024.0:
+            currentDevice = .iPad_Standard
         case 896.0:
             currentDevice = .iPhone_11_ProMax
         case 812.0:
@@ -254,6 +237,8 @@ struct ContentView:View {
             subtractAmount = -1080
         case .iPad_Pro_11inch:
             subtractAmount = -908
+        case .iPad_Standard:
+            subtractAmount = -800
         case .iPhone_11_ProMax:
             subtractAmount = -606
         case .iPhone_11_Pro:
@@ -275,6 +260,8 @@ struct ContentView:View {
             subtractAmount = 440
         case .iPad_Pro_11inch:
             subtractAmount = 340
+        case .iPad_Standard:
+            subtractAmount = 320
         case .iPhone_11_ProMax:
             subtractAmount = 170
         case .iPhone_11_Pro:
