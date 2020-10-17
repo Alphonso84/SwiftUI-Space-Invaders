@@ -22,6 +22,7 @@ struct ContentView:View {
     @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
     @State private var speed = 850.0
     @State private var opacity = 0.0
+    @State private var AsteroidAlive = true
     @State private var emitterParticleCreatePoint = CGFloat(-0.1)
     //MARK:- Controll Properties
     @State private var upButtonPressed = false
@@ -47,14 +48,13 @@ struct ContentView:View {
     var body: some View {
         
         ZStack {
-            //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 200, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180),scale: 0.05, scaleRange: 0.1, speed: 825, speedRange: 2, animation: Animation.linear(duration: 4.0).repeatForever(autoreverses: false),animationDelayThreshold: 6)
-                .opacity(opacity)
             
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
+                    //AsteroidView(isAlive:AsteroidAlive)
+                        
                     ShipView(currentLocation:characterLocation)
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
                         .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
@@ -75,10 +75,10 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                            playThrusterAudio()
+                                playThrusterAudio()
                             } else {
                                 upButtonPressed = false
-                                withAnimation (.easeInOut(duration: 20)){
+                                withAnimation (.easeInOut(duration: 40)){
                                     self.startPoint.y = 0.1
                                     opacity = 0.0
                                 }
@@ -87,22 +87,21 @@ struct ContentView:View {
                         }
                         .onReceive(timer) { time in
                             if upButtonPressed && characterLocation.height >= subtractForVerticalScreenSize(){
-                                offSet.height -= 10
-                               // simpleSuccess()
-                                characterLocation = offSet
-                                missileLocation = offSet
-                                withAnimation (.easeInOut(duration:25)){
+                                offSet.height -= 20
+                                withAnimation (.easeInOut(duration:30)){
                                     self.startPoint.y = 3.8
                                     opacity = 1.0
                                 }
-                                print(characterLocation)
+                               // simpleSuccess()
+                                print(timer.upstream.interval)
+                                characterLocation = offSet
+                                missileLocation = offSet
                                         } else {
                                             if offSet.height < 0 {
-                                            offSet.height += 3
-                                                
-                                            characterLocation = offSet
-                                            missileLocation = offSet
-                                  
+                                                offSet.height += 3.5
+                                                characterLocation = offSet
+                                                missileLocation = offSet
+                                               // AsteroidAlive = false
                                             }
                                         }
                                     }
@@ -130,11 +129,7 @@ struct ContentView:View {
                                     missileLocation = offSet
                                     print(characterLocation)
                                             } else {
-                                                if offSet.width < 0 {
-                                                offSet.width += 5
-                                                characterLocation = offSet
-                                                missileLocation = offSet
-                                                }
+//                                              //DO SOMETHING WHEN BUTTON IS RELEASED
                                             }
                                         }
                         Spacer()
@@ -161,11 +156,7 @@ struct ContentView:View {
                                     missileLocation = offSet
                                     print(characterLocation)
                                             } else {
-                                                if offSet.width > 0 {
-                                                offSet.width -= 5
-                                                characterLocation = offSet
-                                                missileLocation = offSet
-                                                }
+//                                                //DO SOMETHING WHEN BUTTON IS RELEASED
                                             }
                                         }
                         Spacer()
@@ -196,8 +187,9 @@ struct ContentView:View {
                                     
                 }
             }
+            
         } .statusBar(hidden: true)
-        .background(LinearGradient(gradient: Gradient(colors: myBackGround), startPoint: startPoint, endPoint: endPoint))
+        .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
            //playMusicAudio()
