@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import CoreMotion
 import AVFoundation
 
 struct ContentView:View {
+    @ObservedObject var motion: MotionManager
     //MARK:- Audio Properties
     @State private var laserSound: AVAudioPlayer?
     @State private var mainThrusterSound: AVAudioPlayer?
@@ -21,6 +23,7 @@ struct ContentView:View {
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
     @State private var speed = 850.0
+    @State private var turningDegrees = Double()
     @State private var opacity = 0.0
     @State private var AsteroidAlive = true
     @State private var emitterParticleCreatePoint = CGFloat(-0.1)
@@ -48,6 +51,12 @@ struct ContentView:View {
     var body: some View {
         
         ZStack {
+            VStack {
+                        Text("Magnetometer Data")
+                        Text("X: \(motion.x)")
+                        Text("Y: \(motion.y)")
+                        Text("Z: \(motion.z)")
+                    }
             
             VStack{
                 Spacer()
@@ -56,11 +65,24 @@ struct ContentView:View {
                     //AsteroidView(isAlive:AsteroidAlive)
                         
                     ShipView(currentLocation:characterLocation)
+                        .opacity(opacity)
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
                         .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
                         .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
+                        .animation(.easeInOut(duration:0.09))
                         .shadow(color: .white, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
                         .animation(.easeInOut(duration:0.09))
+                        .rotationEffect(.degrees(leftButtonPressed ? -5: 0))
+                        .animation(.easeInOut(duration:1))
+                        .rotationEffect(.degrees(rightButtonPressed ? +5: 0))
+                        .animation(.easeInOut(duration:1))
+                        .onAppear(perform: {
+                            withAnimation(.easeIn(duration:10)){
+                            opacity = 20
+                            }
+                        })
+                        
+                    
                 }
                 //MARK:- Button Controls
                 VStack {
@@ -75,30 +97,21 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                                playThrusterAudio()
+                                //playThrusterAudio()
                             } else {
                                 upButtonPressed = false
-                                withAnimation (.easeInOut(duration: 40)){
-                                    self.startPoint.y = 0.1
-                                    opacity = 0.0
-                                }
-                                playThrusterShutdownAudio()
+                               // playThrusterAudio()
+                                //playThrusterShutdownAudio()
                             }
                         }
                         .onReceive(timer) { time in
                             if upButtonPressed && characterLocation.height >= subtractForVerticalScreenSize(){
-                                offSet.height -= 20
-                                withAnimation (.easeInOut(duration:30)){
-                                    self.startPoint.y = 3.8
-                                    opacity = 1.0
-                                }
-                               // simpleSuccess()
-                                print(timer.upstream.interval)
+                                offSet.height -= 30
                                 characterLocation = offSet
                                 missileLocation = offSet
                                         } else {
                                             if offSet.height < 0 {
-                                                offSet.height += 3.5
+                                                offSet.height -= CGFloat(motion.y) * 20
                                                 characterLocation = offSet
                                                 missileLocation = offSet
                                                // AsteroidAlive = false
@@ -123,13 +136,20 @@ struct ContentView:View {
                             }
                             .onReceive(timer) { time in
                                 if leftButtonPressed && characterLocation.width >= -deltaForHorizontalScreenSize(){
-                                    offSet.width -= 20
+                                    offSet.width -= 30
+//                                    withAnimation (.easeInOut(duration: 10)){
+//                                        turningDegrees += 1
+//                                    }
+                                   
                                    // simpleSuccess()
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
                                             } else {
 //                                              //DO SOMETHING WHEN BUTTON IS RELEASED
+//                                                withAnimation(.easeInOut(duration:2)) {
+                                                turningDegrees = 0
+                                               // }
                                             }
                                         }
                         Spacer()
@@ -150,13 +170,19 @@ struct ContentView:View {
                             }
                             .onReceive(timer) { time in
                                 if rightButtonPressed && characterLocation.width <= deltaForHorizontalScreenSize(){
-                                    offSet.width += 20
+                                    offSet.width += 30
+//                                    withAnimation (.easeInOut(duration: 10)){
+//                                        turningDegrees -= 1
+//                                    }
                                   //  simpleSuccess()
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
                                             } else {
 //                                                //DO SOMETHING WHEN BUTTON IS RELEASED
+                                               // withAnimation(.easeInOut(duration:2)) {
+                                                turningDegrees = 0
+                                               // }
                                             }
                                         }
                         Spacer()
@@ -177,7 +203,7 @@ struct ContentView:View {
                         }
                         .onReceive(timer) { time in
                             if downButtonPressed && characterLocation.height <= 0{
-                                offSet.height += 20
+                                offSet.height += CGFloat(motion.y)
                                // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
@@ -345,7 +371,7 @@ struct ContentView:View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(motion: MotionManager())
             .preferredColorScheme(.dark)
     }
 }
