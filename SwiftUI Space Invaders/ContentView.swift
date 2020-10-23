@@ -69,7 +69,7 @@ struct ContentView:View {
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
                         .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
                         .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
-                        .animation(.easeInOut(duration:0.09))
+                        .animation(.easeInOut(duration:0.2))
                         .shadow(color: .white, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
                         .animation(.easeInOut(duration:0.09))
                         .rotationEffect(.degrees(leftButtonPressed ? -5: 0))
@@ -97,10 +97,10 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                                //playThrusterAudio()
+                                playThrusterAudio()
                             } else {
                                 upButtonPressed = false
-                               // playThrusterAudio()
+                                playThrusterAudio()
                                 //playThrusterShutdownAudio()
                             }
                         }
@@ -111,7 +111,7 @@ struct ContentView:View {
                                 missileLocation = offSet
                                         } else {
                                             if offSet.height < 0 {
-                                                offSet.height -= CGFloat(motion.y) * 20
+                                                offSet.height += 10
                                                 characterLocation = offSet
                                                 missileLocation = offSet
                                                // AsteroidAlive = false
@@ -203,7 +203,7 @@ struct ContentView:View {
                         }
                         .onReceive(timer) { time in
                             if downButtonPressed && characterLocation.height <= 0{
-                                offSet.height += CGFloat(motion.y)
+                                //offSet.height += 30
                                // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
