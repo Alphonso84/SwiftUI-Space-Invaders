@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct AsteroidView:View {
-    public init() {
-        
-    }
     var asteroids = ["asteroid","asteroid-2","asteroid-3"]
     var colors = [Color.red, Color.white, Color.green, Color.yellow]
-    @State var isAlive:Bool = true
+    var isAlive = true
     @State private var angle = Double()
     var body: some View {
         if isAlive {
@@ -28,7 +25,7 @@ struct AsteroidView:View {
                     self.angle = Double.random(in: 0...360)
                 }
         } else {
-            EmitterView(particleCount: 200, creationPoint: UnitPoint.top, angle: Angle(degrees:360), angleRange: Angle(degrees:360), opacity: 0.5, opacityRange: 0.4, opacitySpeed: 1, scale: 0.5, scaleRange: 0.4, speed: 200, speedRange: 10, animation: Animation.linear(duration: 10))
+            EmitterView(particleCount: 200, creationPoint: UnitPoint.center, angle: Angle(degrees:360), angleRange: Angle(degrees:360), opacity: 0.5, opacityRange: 0.8, opacitySpeed: 1, scale: 0.5, scaleRange: 0.4, speed: 800, speedRange: 300, animation: Animation.easeInOut(duration: 10))
         }
     }
 }

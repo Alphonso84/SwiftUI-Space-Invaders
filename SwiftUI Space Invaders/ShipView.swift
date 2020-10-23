@@ -14,7 +14,7 @@ struct ShipView:View {
             .resizable()
             .frame(width:40, height:40)
             .offset(currentLocation)
-            .animation(.easeOut(duration: 2))
+            .animation(.easeIn(duration: 2))
     }
 }
 

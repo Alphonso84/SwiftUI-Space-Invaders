@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import CoreMotion
 import AVFoundation
 
 struct ContentView:View {
+    @ObservedObject var motion: MotionManager
     //MARK:- Audio Properties
     @State private var laserSound: AVAudioPlayer?
     @State private var mainThrusterSound: AVAudioPlayer?
@@ -21,7 +23,9 @@ struct ContentView:View {
     @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
     @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
     @State private var speed = 850.0
+    @State private var turningDegrees = Double()
     @State private var opacity = 0.0
+    @State private var AsteroidAlive = true
     @State private var emitterParticleCreatePoint = CGFloat(-0.1)
     //MARK:- Controll Properties
     @State private var upButtonPressed = false
@@ -47,20 +51,38 @@ struct ContentView:View {
     var body: some View {
         
         ZStack {
-            //MARK:- Emitter View Background Stars
-            EmitterView(particleCount: 200, creationPoint: UnitPoint(x: 0.5, y: emitterParticleCreatePoint), creationRange: CGSize(width: 2, height: 0), angle: Angle(degrees: 180),scale: 0.05, scaleRange: 0.1, speed: 825, speedRange: 2, animation: Animation.linear(duration: 4.0).repeatForever(autoreverses: false),animationDelayThreshold: 6)
-                .opacity(opacity)
+            VStack {
+                        Text("Magnetometer Data")
+                        Text("X: \(motion.x)")
+                        Text("Y: \(motion.y)")
+                        Text("Z: \(motion.z)")
+                    }
             
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
+                    //AsteroidView(isAlive:AsteroidAlive)
+                        
                     ShipView(currentLocation:characterLocation)
+                        .opacity(opacity)
                         .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
                         .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
                         .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
+                        .animation(.easeInOut(duration:0.2))
                         .shadow(color: .white, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
                         .animation(.easeInOut(duration:0.09))
+                        .rotationEffect(.degrees(leftButtonPressed ? -5: 0))
+                        .animation(.easeInOut(duration:1))
+                        .rotationEffect(.degrees(rightButtonPressed ? +5: 0))
+                        .animation(.easeInOut(duration:1))
+                        .onAppear(perform: {
+                            withAnimation(.easeIn(duration:10)){
+                            opacity = 20
+                            }
+                        })
+                        
+                    
                 }
                 //MARK:- Button Controls
                 VStack {
@@ -75,34 +97,24 @@ struct ContentView:View {
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
                                 upButtonPressed = true
-                            playThrusterAudio()
+                                playThrusterAudio()
                             } else {
                                 upButtonPressed = false
-                                withAnimation (.easeInOut(duration: 20)){
-                                    self.startPoint.y = 0.1
-                                    opacity = 0.0
-                                }
-                                playThrusterShutdownAudio()
+                                playThrusterAudio()
+                                //playThrusterShutdownAudio()
                             }
                         }
                         .onReceive(timer) { time in
                             if upButtonPressed && characterLocation.height >= subtractForVerticalScreenSize(){
-                                offSet.height -= 10
-                               // simpleSuccess()
+                                offSet.height -= 30
                                 characterLocation = offSet
                                 missileLocation = offSet
-                                withAnimation (.easeInOut(duration:25)){
-                                    self.startPoint.y = 3.8
-                                    opacity = 1.0
-                                }
-                                print(characterLocation)
                                         } else {
                                             if offSet.height < 0 {
-                                            offSet.height += 3
-                                                
-                                            characterLocation = offSet
-                                            missileLocation = offSet
-                                  
+                                                offSet.height += 10
+                                                characterLocation = offSet
+                                                missileLocation = offSet
+                                               // AsteroidAlive = false
                                             }
                                         }
                                     }
@@ -124,17 +136,20 @@ struct ContentView:View {
                             }
                             .onReceive(timer) { time in
                                 if leftButtonPressed && characterLocation.width >= -deltaForHorizontalScreenSize(){
-                                    offSet.width -= 20
+                                    offSet.width -= 30
+//                                    withAnimation (.easeInOut(duration: 10)){
+//                                        turningDegrees += 1
+//                                    }
+                                   
                                    // simpleSuccess()
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
                                             } else {
-                                                if offSet.width < 0 {
-                                                offSet.width += 5
-                                                characterLocation = offSet
-                                                missileLocation = offSet
-                                                }
+//                                              //DO SOMETHING WHEN BUTTON IS RELEASED
+//                                                withAnimation(.easeInOut(duration:2)) {
+                                                turningDegrees = 0
+                                               // }
                                             }
                                         }
                         Spacer()
@@ -155,17 +170,19 @@ struct ContentView:View {
                             }
                             .onReceive(timer) { time in
                                 if rightButtonPressed && characterLocation.width <= deltaForHorizontalScreenSize(){
-                                    offSet.width += 20
+                                    offSet.width += 30
+//                                    withAnimation (.easeInOut(duration: 10)){
+//                                        turningDegrees -= 1
+//                                    }
                                   //  simpleSuccess()
                                     characterLocation = offSet
                                     missileLocation = offSet
                                     print(characterLocation)
                                             } else {
-                                                if offSet.width > 0 {
-                                                offSet.width -= 5
-                                                characterLocation = offSet
-                                                missileLocation = offSet
-                                                }
+//                                                //DO SOMETHING WHEN BUTTON IS RELEASED
+                                               // withAnimation(.easeInOut(duration:2)) {
+                                                turningDegrees = 0
+                                               // }
                                             }
                                         }
                         Spacer()
@@ -186,7 +203,7 @@ struct ContentView:View {
                         }
                         .onReceive(timer) { time in
                             if downButtonPressed && characterLocation.height <= 0{
-                                offSet.height += 20
+                                //offSet.height += 30
                                // simpleSuccess()
                                 characterLocation = offSet
                                 missileLocation = offSet
@@ -196,8 +213,9 @@ struct ContentView:View {
                                     
                 }
             }
+            
         } .statusBar(hidden: true)
-        .background(LinearGradient(gradient: Gradient(colors: myBackGround), startPoint: startPoint, endPoint: endPoint))
+        .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
            //playMusicAudio()
@@ -353,7 +371,7 @@ struct ContentView:View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(motion: MotionManager())
             .preferredColorScheme(.dark)
     }
 }
