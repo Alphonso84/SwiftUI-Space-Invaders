@@ -65,6 +65,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D012A6C52560A1BF0025A74E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D012A6BB256099290025A74E /* AudioModel.swift */,
+				D012A6C125609FA10025A74E /* ControlModel.swift */,
+				D012A6BE25609BC40025A74E /* LocationModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		D0D4F52725225C3300900D9F = {
 			isa = PBXGroup;
 			children = (
@@ -86,9 +96,7 @@
 			children = (
 				D0D4F53325225C3300900D9F /* SwiftUI_Space_InvadersApp.swift */,
 				D0D4F53525225C3300900D9F /* ContentView.swift */,
-				D012A6BB256099290025A74E /* AudioModel.swift */,
-				D012A6C125609FA10025A74E /* ControlModel.swift */,
-				D012A6BE25609BC40025A74E /* LocationModel.swift */,
+				D012A6C52560A1BF0025A74E /* Models */,
 				D0F3B650253B9F1900265A10 /* MotionManager.swift */,
 				D0C65B4B252F9A580048787B /* AnimatedGradientView.swift */,
 				D03EB08F2526E9F300ED5046 /* MyButtonStyle.swift */,
