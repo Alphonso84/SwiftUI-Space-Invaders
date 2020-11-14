@@ -51,6 +51,7 @@ struct ContentView:View {
     var body: some View {
         
         ZStack {
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
 
             VStack{
                 Spacer()
@@ -212,7 +213,7 @@ struct ContentView:View {
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
-           //playMusicAudio()
+           playMusicAudio()
            deviceFromScreenSize()
             print(UIScreen.screenHeight)
            print("DEVICE DETECTED: \(currentDevice)")
