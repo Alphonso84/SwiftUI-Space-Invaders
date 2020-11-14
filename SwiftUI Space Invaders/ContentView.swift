@@ -51,13 +51,7 @@ struct ContentView:View {
     var body: some View {
         
         ZStack {
-            VStack {
-                        Text("Magnetometer Data")
-                        Text("X: \(motion.x)")
-                        Text("Y: \(motion.y)")
-                        Text("Z: \(motion.z)")
-                    }
-            
+
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
