@@ -11,28 +11,10 @@ import AVFoundation
 
 struct ContentView:View {
     @ObservedObject var motion: MotionManager
-    //MARK:- Audio Properties
-    @State private var laserSound: AVAudioPlayer?
-    @State private var mainThrusterSound: AVAudioPlayer?
-    @State private var mainThrusterShutdownSound: AVAudioPlayer?
-    @State private var gameMusic: AVAudioPlayer?
-    //MARK:- Location Properties
-    @State private var offSet = CGSize(width: 0, height: 0)
-    @State private var characterLocation = CGSize()
-    @State private var missileLocation = CGSize(width: 0, height: 0)
-    @State private var asteroidStartLocation = CGSize(width: CGFloat.random(in: -200...200), height: -800)
-    @State private var asteroidEndLocation = CGSize(width: CGFloat.random(in: -200...200), height: 800)
-    @State private var speed = 850.0
-    @State private var turningDegrees = Double()
-    @State private var opacity = 0.0
-    @State private var AsteroidAlive = true
-    @State private var emitterParticleCreatePoint = CGFloat(-0.1)
-    //MARK:- Controll Properties
-    @State private var upButtonPressed = false
-    @State private var downButtonPressed = false
-    @State private var leftButtonPressed = false
-    @State private var rightButtonPressed = false
-    @State private var fireButtonPressed = false
+    @State private var audioModel = AudioModel()
+    @State private var locationModel = LocationModel()
+    @State private var controlModel = ControlModel()
+
     //MARK:- Background Properties
     @State private var myBackGround = [Color(UIColor.blue),Color(UIColor.blue),Color(UIColor.blue),.blue, .black, .black, .black]
     @State private var myBackGround2 = [.blue,.blue,Color(UIColor.blue),Color(UIColor.blue)]
@@ -46,6 +28,7 @@ struct ContentView:View {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.warning)
     }
+    //MARK:- Body
     ///Timer is being used in buttons to allow constantly incrementing offSet value
     let timer = Timer.publish(every: 0.09, on: .main, in: .common).autoconnect()
     var body: some View {
@@ -57,23 +40,23 @@ struct ContentView:View {
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                    //AsteroidView(isAlive:AsteroidAlive)
+                   
                         
-                    ShipView(currentLocation:characterLocation)
-                        .opacity(opacity)
-                        .shadow(color:upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: upButtonPressed ? 40: 20)
-                        .shadow(color:upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
-                        .shadow(color:upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
+                    ShipView(currentLocation:locationModel.characterLocation)
+                        .opacity(locationModel.opacity)
+                        .shadow(color:controlModel.upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: controlModel.upButtonPressed ? 40: 20)
+                        .shadow(color:controlModel.upButtonPressed ? .yellow: .clear, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 25)
+                        .shadow(color:controlModel.upButtonPressed ? .red:.clear, radius: 5, x: 0.0, y: 30)
                         .animation(.easeInOut(duration:0.2))
                         .shadow(color: .white, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
                         .animation(.easeInOut(duration:0.09))
-                        .rotationEffect(.degrees(leftButtonPressed ? -5: 0))
+                        .rotationEffect(.degrees(controlModel.leftButtonPressed ? -5: 0))
                         .animation(.easeInOut(duration:1))
-                        .rotationEffect(.degrees(rightButtonPressed ? +5: 0))
+                        .rotationEffect(.degrees(controlModel.rightButtonPressed ? +5: 0))
                         .animation(.easeInOut(duration:1))
                         .onAppear(perform: {
                             withAnimation(.easeIn(duration:10)){
-                            opacity = 20
+                                locationModel.opacity = 20
                             }
                         })
                         
@@ -87,29 +70,28 @@ struct ContentView:View {
                         .padding(.trailing,20)
                         .padding(.top,10)
                         .padding(.bottom,10)
-                        .background(upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
+                        .background(controlModel.upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
                         .cornerRadius(6)
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
-                                upButtonPressed = true
+                                controlModel.upButtonPressed = true
                                 playThrusterAudio()
                             } else {
-                                upButtonPressed = false
+                                controlModel.upButtonPressed = false
                                 playThrusterAudio()
                                 //playThrusterShutdownAudio()
                             }
                         }
                         .onReceive(timer) { time in
-                            if upButtonPressed && characterLocation.height >= subtractForVerticalScreenSize(){
-                                offSet.height -= 30
-                                characterLocation = offSet
-                                missileLocation = offSet
+                            if controlModel.upButtonPressed && locationModel.characterLocation.height >= subtractForVerticalScreenSize(){
+                                locationModel.offSet.height -= 30
+                                locationModel.characterLocation = locationModel.offSet
+                                locationModel.missileLocation = locationModel.offSet
                                         } else {
-                                            if offSet.height < 0 {
-                                                offSet.height += 10
-                                                characterLocation = offSet
-                                                missileLocation = offSet
-                                               // AsteroidAlive = false
+                                            if locationModel.offSet.height < 0 {
+                                                locationModel.offSet.height += 10
+                                                locationModel.characterLocation = locationModel.offSet
+                                                locationModel.missileLocation = locationModel.offSet
                                             }
                                         }
                                     }
@@ -118,32 +100,32 @@ struct ContentView:View {
                         Text("LEFT")
                             .foregroundColor(Color.white)
                             .padding(10)
-                            .background(leftButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                            .background(controlModel.leftButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
                             .offset(x: -10, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
-                                   leftButtonPressed = true
+                                    controlModel.leftButtonPressed = true
                                 } else {
-                                   leftButtonPressed = false
+                                    controlModel.leftButtonPressed = false
                                 }
                             }
                             .onReceive(timer) { time in
-                                if leftButtonPressed && characterLocation.width >= -deltaForHorizontalScreenSize(){
-                                    offSet.width -= 30
+                                if controlModel.leftButtonPressed && locationModel.characterLocation.width >= -deltaForHorizontalScreenSize(){
+                                    locationModel.offSet.width -= 30
 //                                    withAnimation (.easeInOut(duration: 10)){
 //                                        turningDegrees += 1
 //                                    }
                                    
                                    // simpleSuccess()
-                                    characterLocation = offSet
-                                    missileLocation = offSet
-                                    print(characterLocation)
+                                    locationModel.characterLocation = locationModel.offSet
+                                    locationModel.missileLocation = locationModel.offSet
+                                    print(locationModel.characterLocation)
                                             } else {
 //                                              //DO SOMETHING WHEN BUTTON IS RELEASED
 //                                                withAnimation(.easeInOut(duration:2)) {
-                                                turningDegrees = 0
+                                                locationModel.turningDegrees = 0
                                                // }
                                             }
                                         }
@@ -151,58 +133,58 @@ struct ContentView:View {
                         Text("RIGHT")
                             .foregroundColor(Color.white)
                             .padding(10)
-                            .background(rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                            .background(controlModel.rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
                             .offset(x: 10, y: -20)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
-                                    rightButtonPressed = true
+                                    controlModel.rightButtonPressed = true
                                     
                                 } else {
-                                    rightButtonPressed = false
+                                    controlModel.rightButtonPressed = false
                                 }
                             }
                             .onReceive(timer) { time in
-                                if rightButtonPressed && characterLocation.width <= deltaForHorizontalScreenSize(){
-                                    offSet.width += 30
+                                if controlModel.rightButtonPressed && locationModel.characterLocation.width <= deltaForHorizontalScreenSize(){
+                                    locationModel.offSet.width += 30
 //                                    withAnimation (.easeInOut(duration: 10)){
 //                                        turningDegrees -= 1
 //                                    }
                                   //  simpleSuccess()
-                                    characterLocation = offSet
-                                    missileLocation = offSet
-                                    print(characterLocation)
+                                    locationModel.characterLocation = locationModel.offSet
+                                    locationModel.missileLocation = locationModel.offSet
+                                    print(locationModel.characterLocation)
                                             } else {
 //                                                //DO SOMETHING WHEN BUTTON IS RELEASED
                                                // withAnimation(.easeInOut(duration:2)) {
-                                                turningDegrees = 0
+                                                locationModel.turningDegrees = 0
                                                // }
                                             }
                                         }
                         Spacer()
                     }
                     Text("DOWN")
-                        .foregroundColor(downButtonPressed ? Color.white: Color.white)
+                        .foregroundColor(controlModel.downButtonPressed ? Color.white: Color.white)
                         .padding(10)
-                        .background(downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                        .background(controlModel.downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                         .cornerRadius(6)
                         .padding(10)
                         .offset(x: 0, y: -30)
                         .onTouchDownUpEvent { (buttonState) in
                             if buttonState == .pressed {
-                                downButtonPressed = true
+                                controlModel.downButtonPressed = true
                             } else {
-                                downButtonPressed = false
+                                controlModel.downButtonPressed = false
                             }
                         }
                         .onReceive(timer) { time in
-                            if downButtonPressed && characterLocation.height <= 0{
+                            if controlModel.downButtonPressed && locationModel.characterLocation.height <= 0{
                                 //offSet.height += 30
                                // simpleSuccess()
-                                characterLocation = offSet
-                                missileLocation = offSet
-                                print(characterLocation)
+                                locationModel.characterLocation = locationModel.offSet
+                                locationModel.missileLocation = locationModel.offSet
+                                print(locationModel.characterLocation)
                             }
                         }
                                     
@@ -294,11 +276,11 @@ struct ContentView:View {
     func playMusicAudio() {
         if let audioURL = Bundle.main.url(forResource: "ES_Ultramarine - Aleph One", withExtension: "mp3") {
             do {
-                try self.gameMusic = AVAudioPlayer(contentsOf: audioURL)
-                self.gameMusic?.numberOfLoops = 1
-                self.gameMusic?.prepareToPlay()
-                self.gameMusic?.volume = 0.3
-                self.gameMusic?.play()
+                try self.audioModel.gameMusic = AVAudioPlayer(contentsOf: audioURL)
+                self.audioModel.gameMusic?.numberOfLoops = 1
+                self.audioModel.gameMusic?.prepareToPlay()
+                self.audioModel.gameMusic?.volume = 0.3
+                self.audioModel.gameMusic?.play()
             } catch {
                 print("Couldn't play audio Error: \(error)")
             }
@@ -310,16 +292,16 @@ struct ContentView:View {
     func playThrusterAudio() {
         if let audioURL = Bundle.main.url(forResource: "Thruster", withExtension: "mp3") {
             do {
-                try self.mainThrusterSound = AVAudioPlayer(contentsOf: audioURL)
-                self.mainThrusterSound?.numberOfLoops = 1
-                if upButtonPressed {
-                self.mainThrusterShutdownSound?.stop()
-                self.mainThrusterSound?.prepareToPlay()
-                    self.mainThrusterSound?.volume = 1
-                self.mainThrusterSound?.play()
+                try self.audioModel.mainThrusterSound = AVAudioPlayer(contentsOf: audioURL)
+                self.audioModel.mainThrusterSound?.numberOfLoops = 1
+                if controlModel.upButtonPressed {
+                    self.audioModel.mainThrusterShutdownSound?.stop()
+                    self.audioModel.mainThrusterSound?.prepareToPlay()
+                    self.audioModel.mainThrusterSound?.volume = 1
+                    self.audioModel.mainThrusterSound?.play()
                     
-                } else if upButtonPressed == false {
-                    self.mainThrusterSound?.stop()
+                } else if controlModel.upButtonPressed == false {
+                    self.audioModel.mainThrusterSound?.stop()
                 }
             } catch {
                 print("Couldn't play audio Error: \(error)")
@@ -332,12 +314,12 @@ struct ContentView:View {
     func playThrusterShutdownAudio() {
         if let audioURL = Bundle.main.url(forResource: "ThrusterShutdown", withExtension: "mp3") {
             do {
-                try self.mainThrusterShutdownSound = AVAudioPlayer(contentsOf: audioURL)
-                self.mainThrusterShutdownSound?.numberOfLoops = 0
-                self.mainThrusterSound?.stop()
-                self.mainThrusterShutdownSound?.prepareToPlay()
-                self.mainThrusterShutdownSound?.volume = 0.3
-                self.mainThrusterShutdownSound?.play()              
+                try self.audioModel.mainThrusterShutdownSound = AVAudioPlayer(contentsOf: audioURL)
+                self.audioModel.mainThrusterShutdownSound?.numberOfLoops = 0
+                self.audioModel.mainThrusterSound?.stop()
+                self.audioModel.mainThrusterShutdownSound?.prepareToPlay()
+                self.audioModel.mainThrusterShutdownSound?.volume = 0.3
+                self.audioModel.mainThrusterShutdownSound?.play()
                
             } catch {
                 print("Couldn't play audio Error: \(error)")
@@ -350,9 +332,9 @@ struct ContentView:View {
     func playWeaponAudio() {
         if let audioURL = Bundle.main.url(forResource: "ClippedAudio", withExtension: "mp3") {
             do {
-                try self.laserSound = AVAudioPlayer(contentsOf: audioURL)
-                self.laserSound?.numberOfLoops = 0
-                self.laserSound?.play()
+                try self.audioModel.laserSound = AVAudioPlayer(contentsOf: audioURL)
+                self.audioModel.laserSound?.numberOfLoops = 0
+                self.audioModel.laserSound?.play()
             } catch {
                 print("Couldn't play audio Error: \(error)")
             }
