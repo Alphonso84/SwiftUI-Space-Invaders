@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftUI_Space_InvadersApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(motion: MotionManager())
+            MainView(motion: MotionManager())
         }
     }
 }

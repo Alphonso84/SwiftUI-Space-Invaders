@@ -9,7 +9,7 @@ import SwiftUI
 import CoreMotion
 import AVFoundation
 
-struct ContentView:View {
+struct MainView:View {
     @ObservedObject var motion: MotionManager
     @State private var audioModel = AudioModel()
     @State private var locationModel = LocationModel()
@@ -348,7 +348,7 @@ struct ContentView:View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(motion: MotionManager())
+        MainView(motion: MotionManager())
             .preferredColorScheme(.dark)
     }
 }
