@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AnimatedGradientView: View {
     
-    @State var gradient = [Color.blue, Color.blue, Color.black, Color.black]
+    @State var gradient = [Color.blue, Color.blue, Color.purple, Color.pink, Color.orange, Color.yellow]
     @State var startPoint = UnitPoint(x: 0, y: 1)
     @State var endPoint = UnitPoint(x: 0, y: 0)
     
