@@ -40,8 +40,7 @@ struct MainView:View {
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                   
-                        
+                
                     ShipView(currentLocation:locationModel.characterLocation)
                         .opacity(locationModel.opacity)
                         .shadow(color:controlModel.upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: controlModel.upButtonPressed ? 40: 20)
