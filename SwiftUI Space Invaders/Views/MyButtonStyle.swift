@@ -15,15 +15,15 @@ public extension View {
     }
 }
 
-struct MyButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .frame(width: 60, height: 25)
-            .foregroundColor(.white)
-            .background(configuration.isPressed ?Color.white: .red)
-            .cornerRadius(10)
-    }
-}
+//struct MyButtonStyle: ButtonStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        configuration.label
+//            .frame(width: 60, height: 25)
+//            .foregroundColor(.white)
+//            .background(configuration.isPressed ?Color.white: .red)
+//            .cornerRadius(10)
+//    }
+//}
 
 public enum ButtonState {
     case pressed

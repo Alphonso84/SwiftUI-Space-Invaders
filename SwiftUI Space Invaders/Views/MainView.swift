@@ -35,12 +35,12 @@ struct MainView:View {
         
         ZStack {
             EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
-
+            
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                
+                    
                     ShipView(currentLocation:locationModel.characterLocation)
                         .opacity(locationModel.opacity)
                         .shadow(color:controlModel.upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: controlModel.upButtonPressed ? 40: 20)
@@ -58,8 +58,6 @@ struct MainView:View {
                                 locationModel.opacity = 20
                             }
                         })
-                        
-                    
                 }
                 //MARK:- Button Controls
                 VStack {
@@ -83,17 +81,17 @@ struct MainView:View {
                         }
                         .onReceive(timer) { time in
                             if controlModel.upButtonPressed && locationModel.characterLocation.height >= subtractForVerticalScreenSize(){
-                                locationModel.offSet.height -= 30
+                                locationModel.offSet.height -= 70
                                 locationModel.characterLocation = locationModel.offSet
                                 locationModel.missileLocation = locationModel.offSet
-                                        } else {
-                                            if locationModel.offSet.height < 0 {
-                                                locationModel.offSet.height += 10
-                                                locationModel.characterLocation = locationModel.offSet
-                                                locationModel.missileLocation = locationModel.offSet
-                                            }
-                                        }
-                                    }
+                            } else {
+                                if locationModel.offSet.height < 0 {
+                                    locationModel.offSet.height += 10
+                                    locationModel.characterLocation = locationModel.offSet
+                                    locationModel.missileLocation = locationModel.offSet
+                                }
+                            }
+                        }
                     HStack {
                         Spacer()
                         Text("LEFT")
@@ -112,22 +110,15 @@ struct MainView:View {
                             }
                             .onReceive(timer) { time in
                                 if controlModel.leftButtonPressed && locationModel.characterLocation.width >= -deltaForHorizontalScreenSize(){
-                                    locationModel.offSet.width -= 30
-//                                    withAnimation (.easeInOut(duration: 10)){
-//                                        turningDegrees += 1
-//                                    }
-                                   
-                                   // simpleSuccess()
+                                    locationModel.offSet.width -= 90
                                     locationModel.characterLocation = locationModel.offSet
                                     locationModel.missileLocation = locationModel.offSet
                                     print(locationModel.characterLocation)
-                                            } else {
-//                                              //DO SOMETHING WHEN BUTTON IS RELEASED
-//                                                withAnimation(.easeInOut(duration:2)) {
-                                                locationModel.turningDegrees = 0
-                                               // }
-                                            }
-                                        }
+                                } else {
+                                    //DO SOMETHING WHEN BUTTON IS RELEASED
+                                    locationModel.turningDegrees = 0
+                                }
+                            }
                         Spacer()
                         Text("RIGHT")
                             .foregroundColor(Color.white)
@@ -146,21 +137,15 @@ struct MainView:View {
                             }
                             .onReceive(timer) { time in
                                 if controlModel.rightButtonPressed && locationModel.characterLocation.width <= deltaForHorizontalScreenSize(){
-                                    locationModel.offSet.width += 30
-//                                    withAnimation (.easeInOut(duration: 10)){
-//                                        turningDegrees -= 1
-//                                    }
-                                  //  simpleSuccess()
+                                    locationModel.offSet.width += 90
                                     locationModel.characterLocation = locationModel.offSet
                                     locationModel.missileLocation = locationModel.offSet
                                     print(locationModel.characterLocation)
-                                            } else {
-//                                                //DO SOMETHING WHEN BUTTON IS RELEASED
-                                               // withAnimation(.easeInOut(duration:2)) {
-                                                locationModel.turningDegrees = 0
-                                               // }
-                                            }
-                                        }
+                                } else {
+                                    //DO SOMETHING WHEN BUTTON IS RELEASED
+                                    locationModel.turningDegrees = 0
+                                }
+                            }
                         Spacer()
                     }
                     Text("DOWN")
@@ -179,18 +164,16 @@ struct MainView:View {
                         }
                         .onReceive(timer) { time in
                             if controlModel.downButtonPressed && locationModel.characterLocation.height <= 0{
-                                //offSet.height += 30
-                               // simpleSuccess()
                                 locationModel.characterLocation = locationModel.offSet
                                 locationModel.missileLocation = locationModel.offSet
                                 print(locationModel.characterLocation)
                             }
                         }
-                                    
                 }
             }
             
-        } .statusBar(hidden: true)
+        }
+        .statusBar(hidden: true)
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
@@ -223,7 +206,7 @@ struct MainView:View {
             currentDevice = .iPhone_11_Pro
         }
     }
-    //0.6773399
+
     func subtractForVerticalScreenSize() ->CGFloat {
         var subtractAmount = CGFloat()
         switch currentDevice {
