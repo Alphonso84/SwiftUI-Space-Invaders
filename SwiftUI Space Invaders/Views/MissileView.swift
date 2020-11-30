@@ -17,6 +17,7 @@ struct MissileView:View {
                 .frame(width: 10, height: 20)
                 .offset(currentLocation)
                 .shadow(color: .red, radius: 25, x: 0, y: -20)
+                //.animation(.easeIn(duration: 1))
         }
     }
 }

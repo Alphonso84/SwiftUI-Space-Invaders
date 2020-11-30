@@ -10,11 +10,11 @@ import CoreMotion
 import AVFoundation
 
 struct MainView:View {
+    //MARK:- ModelProperties
     @ObservedObject var motion: MotionManager
     @State private var audioModel = AudioModel()
     @State private var locationModel = LocationModel()
     @State private var controlModel = ControlModel()
-
     //MARK:- Background Properties
     @State private var myBackGround = [Color(UIColor.blue),Color(UIColor.blue),Color(UIColor.blue),.blue, .black, .black, .black]
     @State private var myBackGround2 = [.blue,.blue,Color(UIColor.blue),Color(UIColor.blue)]
@@ -35,13 +35,26 @@ struct MainView:View {
         
         ZStack {
             EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
-
+            
             VStack{
                 Spacer()
                 //MARK:- Ship, Asteroids, and Missile Views
                 ZStack {
-                   
-                        
+                    MissileView(currentLocation:locationModel.missileLocation, fireLocation: locationModel.missileLocation)
+                        .opacity(controlModel.fireButtonPressed ? 1 : 0)
+                        .animation(.easeInOut(duration:0.2))
+                        .shadow(color: .white, radius: 6, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/)
+                        .animation(.easeInOut(duration:0.09))
+                        .rotationEffect(.degrees(controlModel.leftButtonPressed ? -5: 0))
+                        .animation(.easeInOut(duration:1))
+                        .rotationEffect(.degrees(controlModel.rightButtonPressed ? +5: 0))
+                        .animation(.easeInOut(duration:1))
+                        .onAppear(perform: {
+                            withAnimation(.easeIn(duration:10)){
+                                locationModel.opacity = 20
+                            }
+                        })
+                    
                     ShipView(currentLocation:locationModel.characterLocation)
                         .opacity(locationModel.opacity)
                         .shadow(color:controlModel.upButtonPressed ? .yellow: .blue, radius: 15, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: controlModel.upButtonPressed ? 40: 20)
@@ -59,139 +72,150 @@ struct MainView:View {
                                 locationModel.opacity = 20
                             }
                         })
-                        
-                    
                 }
                 //MARK:- Button Controls
-                VStack {
-                    Text("UP")
-                        .foregroundColor(Color.white)
-                        .padding(.leading,20)
-                        .padding(.trailing,20)
-                        .padding(.top,10)
-                        .padding(.bottom,10)
-                        .background(controlModel.upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
-                        .cornerRadius(6)
-                        .onTouchDownUpEvent { (buttonState) in
-                            if buttonState == .pressed {
-                                controlModel.upButtonPressed = true
-                                playThrusterAudio()
-                            } else {
-                                controlModel.upButtonPressed = false
-                                playThrusterAudio()
-                                //playThrusterShutdownAudio()
+                HStack {
+                    VStack {
+                        Text("UP")
+                            .foregroundColor(Color.white)
+                            .padding(.leading,20)
+                            .padding(.trailing,20)
+                            .padding(.top,10)
+                            .padding(.bottom,10)
+                            .frame(width:70, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .background(controlModel.upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
+                            .cornerRadius(6)
+                            .offset(x: 5, y: -5)
+                            .onTouchDownUpEvent { (buttonState) in
+                                if buttonState == .pressed {
+                                    controlModel.upButtonPressed = true
+                                    playThrusterAudio()
+                                } else {
+                                    controlModel.upButtonPressed = false
+                                    playThrusterAudio()
+                                    //playThrusterShutdownAudio()
+                                }
                             }
-                        }
-                        .onReceive(timer) { time in
-                            if controlModel.upButtonPressed && locationModel.characterLocation.height >= subtractForVerticalScreenSize(){
-                                locationModel.offSet.height -= 30
-                                locationModel.characterLocation = locationModel.offSet
-                                locationModel.missileLocation = locationModel.offSet
-                                        } else {
-                                            if locationModel.offSet.height < 0 {
-                                                locationModel.offSet.height += 10
-                                                locationModel.characterLocation = locationModel.offSet
-                                                locationModel.missileLocation = locationModel.offSet
-                                            }
-                                        }
+                            .onReceive(timer) { time in
+                                if controlModel.upButtonPressed && locationModel.characterLocation.height >= subtractForVerticalScreenSize(){
+                                    locationModel.offSet.height -= 70
+                                    locationModel.characterLocation = locationModel.offSet
+                                    locationModel.missileLocation = locationModel.characterLocation
+                                } else {
+                                    if locationModel.offSet.height < 0 {
+                                        locationModel.offSet.height += 10
+                                        locationModel.characterLocation = locationModel.offSet
+                                        locationModel.missileLocation = locationModel.characterLocation
                                     }
-                    HStack {
-                        Spacer()
-                        Text("LEFT")
-                            .foregroundColor(Color.white)
+                                }
+                            }
+                        HStack {
+                            Spacer()
+                            Text("LEFT")
+                                .foregroundColor(Color.white)
+                                .padding(10)
+                                .frame(width:70, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .background(controlModel.leftButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                                .cornerRadius(6)
+                                .padding(10)
+                                .offset(x: 0, y: -20)
+                                .onTouchDownUpEvent { (buttonState) in
+                                    if buttonState == .pressed {
+                                        controlModel.leftButtonPressed = true
+                                    } else {
+                                        controlModel.leftButtonPressed = false
+                                    }
+                                }
+                                .onReceive(timer) { time in
+                                    if controlModel.leftButtonPressed && locationModel.characterLocation.width >= -deltaForHorizontalScreenSize(){
+                                        locationModel.offSet.width -= 90
+                                        locationModel.characterLocation = locationModel.offSet
+                                        locationModel.missileLocation = locationModel.characterLocation
+                                        print(locationModel.characterLocation)
+                                    } else {
+                                        //DO SOMETHING WHEN BUTTON IS RELEASED
+                                        locationModel.turningDegrees = 0
+                                    }
+                                }
+                            Spacer()
+                            Text("RIGHT")
+                                .foregroundColor(Color.white)
+                                .padding(10)
+                                .background(controlModel.rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                                .cornerRadius(6)
+                                .padding(10)
+                                //.frame(width:70, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .offset(x: 10, y: -20)
+                                .onTouchDownUpEvent { (buttonState) in
+                                    if buttonState == .pressed {
+                                        controlModel.rightButtonPressed = true
+                                        
+                                    } else {
+                                        controlModel.rightButtonPressed = false
+                                    }
+                                }
+                                .onReceive(timer) { time in
+                                    if controlModel.rightButtonPressed && locationModel.characterLocation.width <= deltaForHorizontalScreenSize(){
+                                        locationModel.offSet.width += 90
+                                        locationModel.characterLocation = locationModel.offSet
+                                        locationModel.missileLocation = locationModel.characterLocation
+                                        print(locationModel.characterLocation)
+                                    } else {
+                                        //DO SOMETHING WHEN BUTTON IS RELEASED
+                                        locationModel.turningDegrees = 0
+                                    }
+                                }
+                            Spacer()
+                        }
+                        Text("DOWN")
+                            .foregroundColor(controlModel.downButtonPressed ? Color.white: Color.white)
                             .padding(10)
-                            .background(controlModel.leftButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
+                            .background(controlModel.downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
                             .cornerRadius(6)
                             .padding(10)
-                            .offset(x: -10, y: -20)
+                            //.frame(width:70, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .offset(x: 5, y: -30)
                             .onTouchDownUpEvent { (buttonState) in
                                 if buttonState == .pressed {
-                                    controlModel.leftButtonPressed = true
+                                    controlModel.downButtonPressed = true
                                 } else {
-                                    controlModel.leftButtonPressed = false
+                                    controlModel.downButtonPressed = false
                                 }
                             }
                             .onReceive(timer) { time in
-                                if controlModel.leftButtonPressed && locationModel.characterLocation.width >= -deltaForHorizontalScreenSize(){
-                                    locationModel.offSet.width -= 30
-//                                    withAnimation (.easeInOut(duration: 10)){
-//                                        turningDegrees += 1
-//                                    }
-                                   
-                                   // simpleSuccess()
+                                if controlModel.downButtonPressed && locationModel.characterLocation.height <= 0{
                                     locationModel.characterLocation = locationModel.offSet
-                                    locationModel.missileLocation = locationModel.offSet
+                                    locationModel.missileLocation = locationModel.characterLocation
                                     print(locationModel.characterLocation)
-                                            } else {
-//                                              //DO SOMETHING WHEN BUTTON IS RELEASED
-//                                                withAnimation(.easeInOut(duration:2)) {
-                                                locationModel.turningDegrees = 0
-                                               // }
-                                            }
-                                        }
-                        Spacer()
-                        Text("RIGHT")
-                            .foregroundColor(Color.white)
-                            .padding(10)
-                            .background(controlModel.rightButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
-                            .cornerRadius(6)
-                            .padding(10)
-                            .offset(x: 10, y: -20)
-                            .onTouchDownUpEvent { (buttonState) in
-                                if buttonState == .pressed {
-                                    controlModel.rightButtonPressed = true
-                                    
-                                } else {
-                                    controlModel.rightButtonPressed = false
                                 }
                             }
-                            .onReceive(timer) { time in
-                                if controlModel.rightButtonPressed && locationModel.characterLocation.width <= deltaForHorizontalScreenSize(){
-                                    locationModel.offSet.width += 30
-//                                    withAnimation (.easeInOut(duration: 10)){
-//                                        turningDegrees -= 1
-//                                    }
-                                  //  simpleSuccess()
-                                    locationModel.characterLocation = locationModel.offSet
-                                    locationModel.missileLocation = locationModel.offSet
-                                    print(locationModel.characterLocation)
-                                            } else {
-//                                                //DO SOMETHING WHEN BUTTON IS RELEASED
-                                               // withAnimation(.easeInOut(duration:2)) {
-                                                locationModel.turningDegrees = 0
-                                               // }
-                                            }
-                                        }
-                        Spacer()
+                       
                     }
-                    Text("DOWN")
-                        .foregroundColor(controlModel.downButtonPressed ? Color.white: Color.white)
-                        .padding(10)
-                        .background(controlModel.downButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.2))
-                        .cornerRadius(6)
-                        .padding(10)
-                        .offset(x: 0, y: -30)
-                        .onTouchDownUpEvent { (buttonState) in
-                            if buttonState == .pressed {
-                                controlModel.downButtonPressed = true
-                            } else {
-                                controlModel.downButtonPressed = false
-                            }
-                        }
-                        .onReceive(timer) { time in
-                            if controlModel.downButtonPressed && locationModel.characterLocation.height <= 0{
-                                //offSet.height += 30
-                               // simpleSuccess()
-                                locationModel.characterLocation = locationModel.offSet
-                                locationModel.missileLocation = locationModel.offSet
-                                print(locationModel.characterLocation)
-                            }
-                        }
-                                    
+                    .offset(x: -50, y: 0)
+                    Text("FIRE")
+                                               .foregroundColor(Color.white)
+                                               .padding(10)
+                                               .background(controlModel.fireButtonPressed ? Color.white: Color.red).animation(.easeInOut(duration: 0.2))
+                                               .cornerRadius(6)
+                                               .padding(10)
+                                               .offset(x: -30, y: -29)
+                                               .onTouchDownUpEvent { (buttonState) in
+                                                   if buttonState == .pressed {
+                                                       controlModel.fireButtonPressed = true
+                                                       
+                                                       locationModel.missileLocation.height = -1200
+                                                       playWeaponAudio()
+                                                       
+                                                   } else {
+                                                       controlModel.fireButtonPressed = false
+                                                       locationModel.missileLocation = locationModel.characterLocation
+                                                   }
+                                               }
                 }
             }
             
-        } .statusBar(hidden: true)
+        }
+        .statusBar(hidden: true)
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: {
@@ -224,7 +248,7 @@ struct MainView:View {
             currentDevice = .iPhone_11_Pro
         }
     }
-    //0.6773399
+
     func subtractForVerticalScreenSize() ->CGFloat {
         var subtractAmount = CGFloat()
         switch currentDevice {
