@@ -49,7 +49,7 @@ struct EmitterView: View {
     var opacityRange = 0.0
     var opacitySpeed = 0.0
     
-    var scale: CGFloat = 1
+    var scale: CGFloat = 2
     var scaleRange: CGFloat = 0
     var scaleSpeed: CGFloat = 0
     

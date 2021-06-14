@@ -34,7 +34,7 @@ struct MainView:View {
     var body: some View {
         
         ZStack {
-            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 3)
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 10)
             
             VStack{
                 Spacer()
@@ -83,7 +83,7 @@ struct MainView:View {
                             .padding(.top,10)
                             .padding(.bottom,10)
                             .frame(width:70, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                            .background(controlModel.upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.3))
+                            .background(controlModel.upButtonPressed ? Color.white: Color.blue).animation(.easeInOut(duration: 0.01))
                             .cornerRadius(6)
                             .offset(x: 5, y: -5)
                             .onTouchDownUpEvent { (buttonState) in
@@ -98,7 +98,7 @@ struct MainView:View {
                             }
                             .onReceive(timer) { time in
                                 if controlModel.upButtonPressed && locationModel.characterLocation.height >= subtractForVerticalScreenSize(){
-                                    locationModel.offSet.height -= 70
+                                    locationModel.offSet.height -= 40
                                     locationModel.characterLocation = locationModel.offSet
                                     locationModel.missileLocation = locationModel.characterLocation
                                 } else {
@@ -128,7 +128,7 @@ struct MainView:View {
                                 }
                                 .onReceive(timer) { time in
                                     if controlModel.leftButtonPressed && locationModel.characterLocation.width >= -deltaForHorizontalScreenSize(){
-                                        locationModel.offSet.width -= 90
+                                        locationModel.offSet.width -= 60
                                         locationModel.characterLocation = locationModel.offSet
                                         locationModel.missileLocation = locationModel.characterLocation
                                         print(locationModel.characterLocation)
@@ -156,7 +156,7 @@ struct MainView:View {
                                 }
                                 .onReceive(timer) { time in
                                     if controlModel.rightButtonPressed && locationModel.characterLocation.width <= deltaForHorizontalScreenSize(){
-                                        locationModel.offSet.width += 90
+                                        locationModel.offSet.width += 60
                                         locationModel.characterLocation = locationModel.offSet
                                         locationModel.missileLocation = locationModel.characterLocation
                                         print(locationModel.characterLocation)
