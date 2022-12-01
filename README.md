@@ -1,4 +1,8 @@
 # SwiftUI-Space-Invaders
-Attempt to create an engaging arcade style game without using SpriteKit.
-![Simulator Screen Shot - iPhone 12 Pro - 2021-07-06 at 09 22 58](https://user-images.githubusercontent.com/28531092/124635109-ecab0600-de3b-11eb-98fc-2d236d32213d.png)
+Proof of concept to create a Space Arcade game without using SpriteKit. The results are promising but the amount of code required for adequate game functionality proves that utilizing SpriteKit would be a better option. 
+
+GIF Below shows current status, althought gif is displayed at much lower frame rate than actual game.
+
+
+![](https://github.com/Alphonso84/SwiftUI-Space-Invaders/blob/main/ezgif.com-gif-maker.gif?raw=true)
 
