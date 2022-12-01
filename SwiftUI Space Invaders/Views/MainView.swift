@@ -30,11 +30,11 @@ struct MainView:View {
     }
     //MARK:- Body
     ///Timer is being used in buttons to allow constantly incrementing offSet value
-    let timer = Timer.publish(every: 0.09, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.10, on: .main, in: .common).autoconnect()
     var body: some View {
         
         ZStack {
-            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 1).repeatForever(autoreverses: false),animationDelayThreshold: 10)
+            EmitterView(particleCount: 250, creationPoint: UnitPoint(x: 0.5, y: -0.1), creationRange: CGSize(width: 1, height: 0), angle: Angle(degrees: 180), scale: 0.02, scaleRange: 0.08, speed: 900, speedRange: 300, animation: Animation.linear(duration: 0.75).repeatForever(autoreverses: false),animationDelayThreshold: 10)
             
             VStack{
                 Spacer()
@@ -93,7 +93,7 @@ struct MainView:View {
                                 } else {
                                     controlModel.upButtonPressed = false
                                     playThrusterAudio()
-                                    //playThrusterShutdownAudio()
+                                    playThrusterShutdownAudio()
                                 }
                             }
                             .onReceive(timer) { time in
